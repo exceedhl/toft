@@ -1,0 +1,7 @@
+.DS_Store
+.DS_Store
+.bash_history
+.cache/
+.ssh/
+.sudo_as_admin_successful
+.vagrant
