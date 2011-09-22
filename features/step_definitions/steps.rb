@@ -4,50 +4,46 @@ Given /^the node "([^"]*)" with ip "([^"]*)" is running$/ do |hostname, ip|
   nodes = {hostname => ip}
   
   conf_file = prepare_conf hostname, ip
-  # cmd "sudo lxc-create -n #{hostname} -f #{conf_file} -t lucid-chef"
-  # cmd "sudo lxc-start -n #{hostname} -d"
-  # prepare chef
-  cmd "sudo ssh #{ip} apt-get install ruby-dev libopenssl-ruby build-essential wget ssl-cert --force-yes -y"
-  cmd "sudo ssh #{ip} gem install chef --no-ri --no-rdoc"
-  # cmd "sudo ssh #{ip} ln -s /var/lib/gems/1.8/gems/chef-0.10.4/bin/chef-solo /usr/local/bin/chef-solo"
+  # cmd "lxc-create -n #{hostname} -f #{conf_file} -t lucid-chef"
+  # cmd "lxc-start -n #{hostname} -d"
   
-  cmd "tar zcf /tmp/cookbooks.tar.gz code/cookbooks"
-  cmd "sudo scp /tmp/cookbooks.tar.gz #{ip}:/tmp/cookbooks.tar.gz"
-  cmd "sudo ssh #{ip} tar zxf /tmp/cookbooks.tar.gz -C /tmp"
+  cmd "cp -rf code/cookbooks #{rootfs(hostname)}/tmp/cookbooks"
   
   solo = <<-EOF
   file_cache_path "/tmp/chef-file-cache"
-  cookbook_path ["/tmp/code/cookbooks"]
+  cookbook_path ["/tmp/cookbooks"]
   role_path nil
   log_level :info
   EOF
   
-  File.open("/tmp/solo.rb", 'w') do |f|
+  File.open("#{rootfs(hostname)}/tmp/solo.rb", 'w') do |f|
     f.write(solo);
   end
-  
-  cmd "sudo scp /tmp/solo.rb #{ip}:/tmp/solo.rb"
 end
 
 When /^I apply recipe "([^"]*)" to the node "([^"]*)"$/ do |recipe, hostname|
   json = <<-EOF
   { "run_list": "recipe[#{recipe}]" }
   EOF
-  File.open("/tmp/foo.json", 'w') do |f|
+  File.open("#{rootfs(hostname)}/tmp/foo.json", 'w') do |f|
     f.write(json);
-  end
-  
-  cmd "sudo scp /tmp/foo.json #{nodes[hostname]}:/tmp/foo.json"
-  
-  cmd "sudo ssh #{nodes[hostname]} chef-solo -c /tmp/solo.rb -j /tmp/foo.json"
-  
+  end  
+  cmd "chroot #{rootfs(hostname)} chef-solo -c /tmp/solo.rb -j /tmp/foo.json"
 end
 
 Then /^directory "([^"]*)" should exist$/ do |dirpath|
+  dir = Dir(hostname, dirpath)
+  dir.should exist
+  dir.should have_permission(0644)
+  dir.should belong_to()
 end
 
 def cmd(cmd)
   raise "Command execution failed: [#{cmd}]" unless system cmd
+end
+
+def rootfs(hostname)
+  "/var/lib/lxc/#{hostname}/rootfs"
 end
 
 def prepare_conf(hostname, ip)
