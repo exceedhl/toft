@@ -3,7 +3,7 @@ nodes = {}
 Given /^the node "([^"]*)" with ip "([^"]*)" is running$/ do |hostname, ip|
   nodes = {hostname => ip}
   
-  conf_file = prepare_conf hostname, ip
+  conf_file = generate_lxc_config hostname, ip
   # cmd "lxc-create -n #{hostname} -f #{conf_file} -t lucid-chef"
   # cmd "lxc-start -n #{hostname} -d"
   
@@ -46,7 +46,7 @@ def rootfs(hostname)
   "/var/lib/lxc/#{hostname}/rootfs"
 end
 
-def prepare_conf(hostname, ip)
+def generate_lxc_config(hostname, ip)
   conf = <<-EOF
   lxc.network.type = veth
   lxc.network.flags = up

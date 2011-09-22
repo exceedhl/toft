@@ -11,7 +11,7 @@ if [ "$arch" == "i686" ]; then
     arch=i386
 fi
 
-if [ -e "$cache/rootfs-$arch" ]; then
+if [ -e "$cache/lucid-$arch.tar.gz" ]; then
 	echo "Cache rootfs already exists!"
 	exit 0
 fi
@@ -52,4 +52,9 @@ export DEBIAN_FRONTEND=noninteractive
 apt-get install chef --force-yes -qy
 EOF
 chroot "$cache/rootfs-$arch" bash /tmp/install-chef.sh
+
+# compress root image
+(cd $cache/rootfs-$arch && tar zcf lucid-$arch.tar.gz .)
+mv $cache/rootfs-$arch/lucid-$arch.tar.gz $cache
+
 

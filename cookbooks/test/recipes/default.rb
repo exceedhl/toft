@@ -1,3 +1,3 @@
-directory "/tmp/test" do
+directory "/tmp/dir" do
   action :create
 end

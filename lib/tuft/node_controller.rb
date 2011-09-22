@@ -21,7 +21,7 @@ module Tuft
       @hostname = hostname
       @ip = ip
       unless exists?
-        conf_file = prepare_conf
+        conf_file = generate_lxc_config
         cmd "lxc-create -n #{hostname} -f #{conf_file} -t lucid-chef" 
       end
     end
@@ -29,26 +29,7 @@ module Tuft
     def exists?
       `lxc-ls` =~ /#{@hostname}/
     end
-    
-    def prepare_conf
-      conf = <<-EOF
-      lxc.network.type = veth
-      lxc.network.flags = up
-      lxc.network.link = br0
-      lxc.network.name = eth0
-      lxc.network.ipv4 = #{@ip}/24
-    EOF
-      conf_file = "/tmp/#{@hostname}-conf"
-      File.open(conf_file, 'w') do |f|
-        f.write(conf);
-      end
-      return conf_file
-    end
-    
-    def cmd(cmd)
-      raise "Command execution failed: [#{cmd}]" unless system cmd
-    end
-    
+        
     def start
       while true
         `lxc-start -n #{@hostname} -d`
@@ -71,11 +52,11 @@ module Tuft
     COOKBOOK_PATH = "/tmp/cookbooks"
     CHEF_SOLO_PATH = "/tmp/solo.rb" 
     CHEF_JSON_PATH = "/tmp/solo.json" 
-     
-    def run_recipe(recipe)
+    
+    def run_recipe(recipe, chef_attributes = nil)
       copy_cookbooks
       generate_solo_rb
-      generate_json recipe
+      generate_json recipe, chef_attributes
       cmd "chroot #{rootfs} chef-solo -c #{CHEF_SOLO_PATH} -j #{CHEF_JSON_PATH}"
     end
     
@@ -107,13 +88,32 @@ module Tuft
       end
     end
     
-    def generate_json(recipe)
-      json = <<-EOF
-      { "run_list": "recipe[#{recipe}]" }
-      EOF
+    def generate_json(recipe, chef_attributes)
+      run_list = {"run_list" => "recipe[#{recipe}]"}
+      run_list.merge!(chef_attributes.attributes) unless chef_attributes.nil?
       File.open("#{rootfs}#{CHEF_JSON_PATH}", 'w') do |f|
-        f.write(json);
+        f.write(run_list.to_json);
       end
     end
+    
+    def generate_lxc_config
+      conf = <<-EOF
+      lxc.network.type = veth
+      lxc.network.flags = up
+      lxc.network.link = br0
+      lxc.network.name = eth0
+      lxc.network.ipv4 = #{@ip}/24
+    EOF
+      conf_file = "/tmp/#{@hostname}-conf"
+      File.open(conf_file, 'w') do |f|
+        f.write(conf);
+      end
+      return conf_file
+    end
+    
+    def cmd(cmd)
+      raise "Command execution failed: [#{cmd}]" unless system cmd
+    end
+    
   end
 end

@@ -128,34 +128,6 @@ EOF
     return 0
 }
 
-download_ubuntu()
-{
-    packages=dialog,apt,apt-utils,resolvconf,iproute,inetutils-ping,dhcp3-client,ssh,lsb-release,wget,gpgv,gnupg
-
-    cache=$1
-    arch=$2
-
-    # check the mini ubuntu was not already downloaded
-    mkdir -p "$cache/partial-$arch"
-    if [ $? -ne 0 ]; then
-	echo "Failed to create '$cache/partial-$arch' directory"
-	return 1
-    fi
-
-    # download a mini ubuntu into a cache
-    echo "Downloading ubuntu minimal ..."
-    debootstrap --verbose --variant=minbase --components=main,universe --arch=$arch --include=$packages lucid $cache/partial-$arch
-    if [ $? -ne 0 ]; then
-	echo "Failed to download the rootfs, aborting."
-	return 1
-    fi
-
-    mv "$1/partial-$arch" "$1/rootfs-$arch"
-    echo "Download complete."
-
-    return 0
-}
-
 copy_ubuntu()
 {
     cache=$1
@@ -163,8 +135,9 @@ copy_ubuntu()
     rootfs=$3
 
     # make a local copy of the miniubuntu
-    echo -n "Copying rootfs to $rootfs ..."
-    cp -a $cache/rootfs-$arch $rootfs || return 1
+    echo -n "Extracting rootfs image to $rootfs ..."
+    mkdir $rootfs
+    tar zxf $cache/lucid-$arch.tar.gz -C $rootfs || return 1
     return 0
 }
 
@@ -191,7 +164,6 @@ install_ubuntu()
 
 	echo "Checking cache download in $cache/rootfs-$arch ... "
 	if [ ! -e "$cache/rootfs-$arch" ]; then
-	    download_ubuntu $cache $arch
 	    if [ $? -ne 0 ]; then
 		echo "Failed to download 'ubuntu base'"
 		return 1
