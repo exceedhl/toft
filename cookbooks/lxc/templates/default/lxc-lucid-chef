@@ -169,7 +169,7 @@ install_ubuntu()
 		return 1
 	    fi
 	fi
-	echo "Copy $cache/rootfs-$arch to $rootfs ... "
+
 	copy_ubuntu $cache $arch $rootfs
 	if [ $? -ne 0 ]; then
 	    echo "Failed to copy rootfs"

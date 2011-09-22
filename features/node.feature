@@ -9,8 +9,6 @@ Scenario: Create or destroy node
 	Then There should be 1 nodes in the environment
 	When I add another node "n1" with ip "192.168.20.2"
 	Then There should be 1 nodes in the environment	
-	When I remove node "n1"
-	Then There should be 0 nodes in the environment
 	
 Scenario: Start or stop node
 	Given I have a node "n1" with ip "192.168.20.2"
