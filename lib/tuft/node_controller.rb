@@ -46,7 +46,6 @@ module Tuft
     end
     
     def cmd(cmd)
-      puts "Executing command: [#{cmd}]"
       raise "Command execution failed: [#{cmd}]" unless system cmd
     end
     
@@ -67,6 +66,54 @@ module Tuft
     
     def running?
       `lxc-info -n #{@hostname}` =~ /RUNNING/
+    end
+     
+    COOKBOOK_PATH = "/tmp/cookbooks"
+    CHEF_SOLO_PATH = "/tmp/solo.rb" 
+    CHEF_JSON_PATH = "/tmp/solo.json" 
+     
+    def run_recipe(recipe)
+      copy_cookbooks
+      generate_solo_rb
+      generate_json recipe
+      cmd "chroot #{rootfs} chef-solo -c #{CHEF_SOLO_PATH} -j #{CHEF_JSON_PATH}"
+    end
+    
+    def has_dir?(dirpath)
+      dirpath = rootfs + dirpath
+      File.exist?(dirpath)
+    end
+    
+    private
+    def rootfs
+      "/var/lib/lxc/#{@hostname}/rootfs"
+    end
+  
+    def copy_cookbooks
+      cmd "rm -rf #{rootfs}#{COOKBOOK_PATH}"      
+      cmd "cp -rf cookbooks #{rootfs}#{COOKBOOK_PATH}"
+    end
+    
+    def generate_solo_rb
+      solo = <<-EOF
+      file_cache_path "/tmp/chef-file-cache"
+      cookbook_path ["#{COOKBOOK_PATH}"]
+      role_path nil
+      log_level :info
+      EOF
+
+      File.open("#{rootfs}#{CHEF_SOLO_PATH}", 'w') do |f|
+        f.write(solo);
+      end
+    end
+    
+    def generate_json(recipe)
+      json = <<-EOF
+      { "run_list": "recipe[#{recipe}]" }
+      EOF
+      File.open("#{rootfs}#{CHEF_JSON_PATH}", 'w') do |f|
+        f.write(json);
+      end
     end
   end
 end
