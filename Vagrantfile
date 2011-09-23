@@ -12,7 +12,7 @@ Vagrant::Config.run do |config|
     # config.vm.boot_mode = :gui
     config.vm.share_folder("v-root1", "/home/vagrant/code", ".", :nfs => true)
     config.vm.provision :chef_solo do |chef|
-      chef.cookbooks_path = "cookbooks"
+      chef.cookbooks_path = "scripts/cookbooks"
       chef.add_recipe("vagrant_main")
     end
   end

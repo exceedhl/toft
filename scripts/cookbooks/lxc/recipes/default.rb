@@ -29,8 +29,8 @@ template "/usr/lib/lxc/templates/lxc-lucid-chef" do
   action :create
 end
 
-cookbook_file "/usr/local/bin/prepare-ubuntu-image" do
-  source "prepare-ubuntu-image"
+cookbook_file "/usr/local/bin/lxc-create-ubuntu-image" do
+  source "lxc-create-ubuntu-image"
   mode "0755"
 end
 

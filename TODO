@@ -1,0 +1,6 @@
+- allow to specify cookbooks and roles dir 
+- more node commands: run(ssh or not), has_file?, install_package, has_package?(gem, yum, deb...),
+ file_permission, file_owner, 
+- more ubuntu version support, centos support
+- image package provision
+- ec2 support

@@ -31,10 +31,8 @@ module Tuft
     end
         
     def start
-      while true
-        `lxc-start -n #{@hostname} -d`
-        break if running?
-      end
+      `lxc-start -n #{@hostname} -d`
+      `lxc-wait -n #{@hostname} -s RUNNING`
     end
 
     def stop
