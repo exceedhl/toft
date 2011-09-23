@@ -46,16 +46,21 @@ module Tuft
     def running?
       `lxc-info -n #{@hostname}` =~ /RUNNING/
     end
-     
-    COOKBOOK_PATH = "/tmp/cookbooks"
-    CHEF_SOLO_PATH = "/tmp/solo.rb" 
-    CHEF_JSON_PATH = "/tmp/solo.json" 
     
-    def run_recipe(recipe, chef_attributes = nil)
-      copy_cookbooks
+    def run_shell(command)
+      cmd "chroot #{rootfs} #{command}"
+    end
+     
+    DEST_COOKBOOK_PATH = "/tmp/cookbooks"
+    DEST_ROLE_PATH = "/tmp/roles"
+    DEST_CHEF_SOLO_PATH = "/tmp/solo.rb" 
+    DEST_CHEF_JSON_PATH = "/tmp/solo.json" 
+    
+    def run_chef(run_list, chef_attributes = nil)
+      copy_chef_material
       generate_solo_rb
-      generate_json recipe, chef_attributes
-      cmd "chroot #{rootfs} chef-solo -c #{CHEF_SOLO_PATH} -j #{CHEF_JSON_PATH}"
+      generate_json ([] << run_list).flatten, chef_attributes
+      run_shell "chef-solo -c #{DEST_CHEF_SOLO_PATH} -j #{DEST_CHEF_JSON_PATH}"
     end
     
     def has_dir?(dirpath)
@@ -68,28 +73,32 @@ module Tuft
       "/var/lib/lxc/#{@hostname}/rootfs"
     end
   
-    def copy_cookbooks
-      cmd "rm -rf #{rootfs}#{COOKBOOK_PATH}"      
-      cmd "cp -rf cookbooks #{rootfs}#{COOKBOOK_PATH}"
+    def copy_chef_material
+      cmd "rm -rf #{rootfs}#{DEST_COOKBOOK_PATH} #{rootfs}#{DEST_ROLE_PATH}"      
+      cmd "cp -rf #{Tuft.cookbook_path} #{rootfs}#{DEST_COOKBOOK_PATH}"
+      cmd "cp -rf #{Tuft.role_path} #{rootfs}#{DEST_ROLE_PATH}" unless roles_missing?
+    end
+    
+    def roles_missing?
+      Tuft.role_path.nil? || Tuft.role_path.empty?
     end
     
     def generate_solo_rb
       solo = <<-EOF
-      file_cache_path "/tmp/chef-file-cache"
-      cookbook_path ["#{COOKBOOK_PATH}"]
-      role_path nil
-      log_level :info
+file_cache_path "/tmp/chef-file-cache"
+cookbook_path ["#{DEST_COOKBOOK_PATH}"]
       EOF
+      solo += "role_path [\"#{DEST_ROLE_PATH}\"]" unless roles_missing?
 
-      File.open("#{rootfs}#{CHEF_SOLO_PATH}", 'w') do |f|
+      File.open("#{rootfs}#{DEST_CHEF_SOLO_PATH}", 'w') do |f|
         f.write(solo);
       end
     end
     
-    def generate_json(recipe, chef_attributes)
-      run_list = {"run_list" => "recipe[#{recipe}]"}
+    def generate_json(run_list, chef_attributes)
+      run_list = {"run_list" => run_list}
       run_list.merge!(chef_attributes.attributes) unless chef_attributes.nil?
-      File.open("#{rootfs}#{CHEF_JSON_PATH}", 'w') do |f|
+      File.open("#{rootfs}#{DEST_CHEF_JSON_PATH}", 'w') do |f|
         f.write(run_list.to_json);
       end
     end

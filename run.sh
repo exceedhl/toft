@@ -1,1 +1,0 @@
-ssh -i vagrant vagrant@33.33.33.12 -- cucumber code/$@

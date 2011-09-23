@@ -1,7 +1,6 @@
-require 'pp'
-
 Given /^I have a node "([^"]*)" with ip "([^"]*)"$/ do |hostname, ip|
   @controller.create_node hostname, ip
+  @controller.nodes['n1'].run_shell "rm -rf /tmp/stub"
 end
 
 When /^I add another node "([^"]*)" with ip "([^"]*)"$/ do |hostname, ip|
