@@ -14,10 +14,6 @@ When /^I run "([^"]*)" on node "([^"]*)" and overwrite attributes with:$/ do |ru
   @controller.nodes[node].run_chef run_list, Tuft::ChefAttributes.new(table)
 end
 
-Then /^Node "([^"]*)" should have directory "([^"]*)"$/ do |node, dirpath|
-  @controller.nodes[node].should have_dir(dirpath)
-end
-
 When /^I set the role path to empty$/ do
   Tuft.role_path = ""
   @controller.nodes['n1'].rm "/tmp/*"

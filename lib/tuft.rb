@@ -1,4 +1,5 @@
 require 'tuft/node_controller'
+require 'tuft/file_checker'
 require 'tuft/chef/chef_attributes'
 require 'tuft/chef/chef_runner'
 

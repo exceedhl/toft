@@ -9,3 +9,4 @@
 - logger level
 - (done)provide rm to avoid going through ssh
 - allow vm network/ip configuration
+- run ssh with script file

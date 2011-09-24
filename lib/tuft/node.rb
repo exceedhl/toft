@@ -1,5 +1,6 @@
 require 'net/ssh'
 require 'ping'
+require 'tuft/file_checker'
 
 module Tuft
   class Node
@@ -92,9 +93,8 @@ u1StRY//+2thpgAgM6ILfHNkJW+3lQ6xnSNCVLKCIc6ECLukSKcZjg==
       @chef_runner.run run_list, chef_attributes
     end
 
-    def has_dir?(dirpath)
-      dirpath = rootfs + dirpath
-      File.exist?(dirpath)
+    def file(path)
+      FileChecker.new(rootfs, path)
     end
 
     private

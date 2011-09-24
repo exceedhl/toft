@@ -17,7 +17,7 @@ if [ -e "$cache/lucid-$arch.tar.gz" ]; then
 fi
 
 chef_packages=ruby,rubygems1.8,ruby-dev,libopenssl-ruby,build-essential,wget,ssl-cert
-packages=dialog,apt,apt-utils,resolvconf,iproute,inetutils-ping,dhcp3-client,ssh,lsb-release,wget,gpgv,gnupg,$chef_packages
+packages=dialog,apt,apt-utils,resolvconf,iproute,inetutils-ping,dhcp3-client,ssh,lsb-release,wget,gpgv,gnupg,sudo,$chef_packages
 
 # check the mini ubuntu was not already downloaded
 mkdir -p "$cache/partial-$arch"
