@@ -84,7 +84,7 @@ u1StRY//+2thpgAgM6ILfHNkJW+3lQ6xnSNCVLKCIc6ECLukSKcZjg==
     end
     
     def run_shell(command)
-      raise ArgumentError, "Trying to run empty command on node #{@hostname}", caller if command.empty?
+      raise ArgumentError, "Trying to run empty command on node #{@hostname}", caller if empty?(command)
       # cmd "chroot #{rootfs} #{command}"
       Net::SSH.start(@ip, "root", :key_data => [PRIVATE_KEY]) do |ssh|
         ssh.exec! command do |ch, stream, data|
@@ -98,8 +98,9 @@ u1StRY//+2thpgAgM6ILfHNkJW+3lQ6xnSNCVLKCIc6ECLukSKcZjg==
       return true
     end
     
-    def rm(cmd)
-      cmd "rm -rf #{rootfs}#{cmd}"
+    def rm(dir)
+      raise ArgumentError, "Illegal dir path: [#{dir}]", caller if empty?(dir) || dir[0] != ?/
+      cmd "rm -rf #{rootfs}#{dir}"
     end
      
     DEST_COOKBOOK_PATH = "/tmp/cookbooks"
@@ -120,6 +121,10 @@ u1StRY//+2thpgAgM6ILfHNkJW+3lQ6xnSNCVLKCIc6ECLukSKcZjg==
     end
     
     private
+    def empty?(s)
+      s.nil? || s.empty?
+    end
+    
     def rootfs
       "/var/lib/lxc/#{@hostname}/rootfs"
     end
@@ -143,7 +148,7 @@ u1StRY//+2thpgAgM6ILfHNkJW+3lQ6xnSNCVLKCIc6ECLukSKcZjg==
     end
     
     def roles_missing?
-      Tuft.role_path.nil? || Tuft.role_path.empty?
+      empty?(Tuft.role_path)
     end
     
     def generate_solo_rb
