@@ -8,4 +8,4 @@ run_shell_script
 - (done)parameterize cookbook, role etc. path
 - DSL - helpers
 - logger level
-- provide rm to avoid going through ssh
+- (done)provide rm to avoid going through ssh
