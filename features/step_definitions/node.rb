@@ -1,6 +1,7 @@
-Given /^I have a node "([^"]*)" with ip "([^"]*)"$/ do |hostname, ip|
+Given /^I have a clean running node "([^"]*)" with ip "([^"]*)"$/ do |hostname, ip|
   @controller.create_node hostname, ip
-  @controller.nodes['n1'].run_shell "rm -rf /tmp/stub"
+  @controller.nodes['n1'].start
+  @controller.nodes['n1'].rm "/tmp/stub"
 end
 
 When /^I add another node "([^"]*)" with ip "([^"]*)"$/ do |hostname, ip|

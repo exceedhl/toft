@@ -4,5 +4,8 @@ run_shell_script
 - more ubuntu version support, centos support
 - image package provision
 - ec2 support
-- embed key rather than copying from root
-- parameterize cookbook, role etc. path
+- (partially done)embed key rather than copying from root
+- (done)parameterize cookbook, role etc. path
+- DSL - helpers
+- logger level
+- provide rm to avoid going through ssh

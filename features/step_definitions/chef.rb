@@ -20,18 +20,20 @@ end
 
 When /^I set the role path to empty$/ do
   Tuft.role_path = ""
-  @controller.nodes['n1'].run_shell "rm -rf /tmp/*"
+  @controller.nodes['n1'].rm "/tmp/*"
 end
 
-Then /^I run "([^"]*)" on node "([^"]*)" successfully$/ do |run_list, node|
-  lambda { @controller.nodes[node].run_chef(run_list) }.should_not raise_error
+Then /^Running chef "([^"]*)" on node "([^"]*)" should succeed$/ do |run_list, node|
+  result = false
+  lambda { result = @controller.nodes[node].run_chef(run_list) }.should_not raise_error
+  result.should be_true
 end
 
 When /^I set the cookbook path to empty$/ do
   Tuft.cookbook_path = ""
-  @controller.nodes['n1'].run_shell "rm -rf /tmp/*"  
+  @controller.nodes['n1'].rm "/tmp/*"  
 end
 
-Then /^Running "([^"]*)" on node "([^"]*)" should fail$/ do |run_list, node|
+Then /^Running chef "([^"]*)" on node "([^"]*)" should fail$/ do |run_list, node|
   lambda { @controller.nodes[node].run_chef(run_list) }.should raise_error
 end
