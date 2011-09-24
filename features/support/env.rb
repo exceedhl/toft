@@ -15,5 +15,5 @@ Before do
 end
 
 at_exit do
-  controller.destroy_node "n1"
+  # controller.destroy_node "n1"
 end

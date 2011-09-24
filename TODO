@@ -9,3 +9,4 @@ run_shell_script
 - DSL - helpers
 - logger level
 - (done)provide rm to avoid going through ssh
+- allow vm network/ip configuration

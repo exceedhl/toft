@@ -8,7 +8,9 @@ configure_ubuntu()
 	# add host root ssh access
     mkdir $rootfs/root/.ssh
     chmod 0600 $rootfs/root/.ssh
-	cat /root/.ssh/id_rsa.pub > $rootfs/root/.ssh/authorized_keys
+	cat <<-EOF > $rootfs/root/.ssh/authorized_keys
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC+5mgdJTbEQMn16lkOaGrmDfGnbV81mqPolq9+hGlce59+NihDM3b7aei1Z7KmsOt7y3GUBZVes3udncPA7dNmgOsFrVfHffERUeJ+UFbGUeJ4kKUkql03AkxUg4O2rD0epO7CuqYy5T51eeARKGKXsTuVoF6sh4DuyT/DS3/7+lCbdN56klYWc1mSXCKHxKQo90f81bhId2pxi73+5YnmUVAziK4+90THntS8J4+xgOis5VkO+2iFjd65GVCa9QIjlWPu8zwE+JB07e4lzMonxdReqIjrexBtwR4okdaz+6gjmxGHBVHtJjn8KsjStviAVj+ohG2M2464fuQnpbTd root insecure public key	
+	EOF
 
 	# copy host resolve 
     rm $rootfs/etc/resolv.conf

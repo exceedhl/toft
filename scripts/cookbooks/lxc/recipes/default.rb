@@ -34,13 +34,6 @@ cookbook_file "/usr/local/bin/lxc-create-ubuntu-image" do
   mode "0755"
 end
 
-bash "create root ssh key " do
-  user "root"
-  code <<-EOH
-  printf "\ny" | ssh-keygen -q -N ""
-EOH
-end
-
 bash "create ubuntu rootfs" do
   code <<-EOH
 /var/tmp/prepare-ubuntu-image.sh
