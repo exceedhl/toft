@@ -16,5 +16,12 @@ module Tuft
       @nodes[hostname].destroy
       @nodes.delete hostname
     end
+    
+    @@instance = NodeController.new
+    class << self
+      def instance
+        @@instance
+      end
+    end
   end
 end

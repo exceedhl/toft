@@ -5,15 +5,15 @@ require 'tuft'
 Tuft.cookbook_path = File.dirname(__FILE__) + '/../../fixtures/chef/cookbooks'
 Tuft.role_path = File.dirname(__FILE__) + '/../../fixtures/chef/roles'
 
-controller = Tuft::NodeController.new
-controller.create_node "n1", "192.168.20.2"
-
 World(Tuft)
 
+include Tuft
+n1 = create_node "n1", "192.168.20.2"
+
 Before do
-  @controller = controller
+  @n1 = n1
 end
 
 at_exit do
-  controller.destroy_node "n1"
+  n1.destroy
 end
