@@ -1,12 +1,16 @@
 - (done)allow to specify cookbooks and roles dir 
-- more node commands: -run multiple chef, -run(ssh or not), has_file?, install_package, has_package?(gem, yum, deb...), file_permission, file_owner, service_running?, port_listening?, run_shell_script
+- more node commands: -run multiple chef, -run(ssh or not), -has_file?, install_package, has_package?(gem, yum, deb...), -file_permission, -file_owner, service_running?, port_listening?
+- DSL - helpers
+- chef-client support
+- run ssh with script file
 - more ubuntu version support, centos support
+- allow vm network/ip configuration
 - image package provision
 - ec2 support
 - (done)embed key rather than copying from root
 - (done)parameterize cookbook, role etc. path
-- DSL - helpers
-- logger level
 - (done)provide rm to avoid going through ssh
-- allow vm network/ip configuration
-- run ssh with script file
+- create a tool for provision
+- puppet support
+- logger level
+- extract out different modules

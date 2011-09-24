@@ -39,10 +39,10 @@ u1StRY//+2thpgAgM6ILfHNkJW+3lQ6xnSNCVLKCIc6ECLukSKcZjg==
       @ip = ip
       unless exists?
         conf_file = generate_lxc_config
-        cmd "lxc-create -n #{hostname} -f #{conf_file} -t lucid-chef" 
+        system "lxc-create -n #{hostname} -f #{conf_file} -t lucid-chef" 
       end
       @chef_runner = Tuft::Chef::ChefRunner.new("#{rootfs}") do |chef_command|
-        run_shell chef_command
+        run_ssh chef_command
       end
     end
 
@@ -70,7 +70,7 @@ u1StRY//+2thpgAgM6ILfHNkJW+3lQ6xnSNCVLKCIc6ECLukSKcZjg==
       `lxc-info -n #{@hostname}` =~ /RUNNING/
     end
 
-    def run_shell(command)
+    def run_ssh(command)
       raise ArgumentError, "Trying to run empty command on node #{@hostname}", caller if command.blank?
       Net::SSH.start(@ip, "root", :key_data => [PRIVATE_KEY]) do |ssh|
         ssh.exec! command do |ch, stream, data|
@@ -86,7 +86,7 @@ u1StRY//+2thpgAgM6ILfHNkJW+3lQ6xnSNCVLKCIc6ECLukSKcZjg==
 
     def rm(dir)
       raise ArgumentError, "Illegal dir path: [#{dir}]", caller if dir.blank? || dir[0] != ?/
-      cmd "rm -rf #{rootfs}#{dir}"
+      system "rm -rf #{rootfs}#{dir}"
     end
 
     def run_chef(run_list, chef_attributes = nil)
@@ -127,10 +127,6 @@ lxc.network.ipv4 = #{@ip}/24
         f.write(conf);
       end
       return conf_file
-    end
-
-    def cmd(cmd)
-      raise "Command execution failed: [#{cmd}]" unless system cmd
     end
   end
 end
