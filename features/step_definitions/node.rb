@@ -8,8 +8,12 @@ When /^I add another node "([^"]*)" with ip "([^"]*)"$/ do |node, ip|
   create_node node, ip  
 end
 
-When /^I remove node "([^"]*)"$/ do |node|
+When /^I destroy node "([^"]*)"$/ do |node|
   destroy_node node
+end
+
+When /^Node "([^"]*)" is destroyed$/ do |node|
+  find(node).destroy
 end
 
 Then /^There should be ([^"]*) nodes in the environment$/ do |count|

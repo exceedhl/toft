@@ -9,12 +9,17 @@ module Tuft
     end
     
     def create_node(hostname, ip)
-      @nodes[hostname] = Tuft::Node.new(hostname, ip)
+      node = Node.new(hostname, ip)
+      node.add_observer self
+      @nodes[hostname] = node
+    end
+    
+    def update(hostname)
+      @nodes.delete hostname
     end
     
     def destroy_node(hostname)
       @nodes[hostname].destroy
-      @nodes.delete hostname
     end
     
     @@instance = NodeController.new

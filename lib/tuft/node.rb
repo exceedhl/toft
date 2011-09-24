@@ -1,3 +1,4 @@
+require 'observer'
 require 'net/ssh'
 require 'ping'
 require 'tuft/file_checker'
@@ -33,6 +34,8 @@ M7iZDQKBgQDQaZy+TMuc8mxBavThqHEHpNHAlo/xBXknwBVc0sAs5e94caFklIOG
 u1StRY//+2thpgAgM6ILfHNkJW+3lQ6xnSNCVLKCIc6ECLukSKcZjg==
 -----END RSA PRIVATE KEY-----    
     EOF
+    
+    include Observable
 
     def initialize(hostname, ip)
       @hostname = hostname
@@ -64,6 +67,8 @@ u1StRY//+2thpgAgM6ILfHNkJW+3lQ6xnSNCVLKCIc6ECLukSKcZjg==
     def destroy
       stop
       `lxc-destroy -n #{@hostname}`
+      changed
+      notify_observers(@hostname)
     end
 
     def running?

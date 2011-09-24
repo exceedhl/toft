@@ -1,7 +1,8 @@
 - (done)allow to specify cookbooks and roles dir 
 - more node commands: -run multiple chef, -run_ssh, -has_file?, install_package, has_package?(gem, yum, deb...), -file_permission, -file_owner, service_running?, port_listening?
-- DSL - helpers
+- (done)DSL - helpers
 - fix bug: node.destroy will not decrease node count
+- optimize lxc rootfs creation time(mostly copying files)
 - chef-client support
 - run ssh with script file
 - more ubuntu version support, centos support
@@ -15,8 +16,3 @@
 - puppet support
 - logger level
 - extract out different modules
-
-DSL:
-
-create_node, start_node, stop_node, destroy_node
-find_node, node
