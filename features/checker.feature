@@ -9,7 +9,7 @@ Scenario: Dir checker
 	
 Scenario: File checker
 	Given I have a clean running node "n1" with ip "192.168.20.2"
-	When Running shell command "userdel n1; useradd n1" on "n1" should succeed
-	And Running shell command "sudo -u n1 touch /tmp/a" on "n1" should succeed
+	When Running ssh command "if getent passwd n1; then userdel n1; fi; useradd n1" on "n1" should succeed
+	And Running ssh command "sudo -u n1 touch /tmp/a" on "n1" should succeed
 	Then Node "n1" should have file or directory "/tmp/a"
 	And Node "n1" should have "regular empty file" "/tmp/a" owned by user "n1" and group "n1" with permission "644"	

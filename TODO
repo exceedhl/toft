@@ -1,5 +1,5 @@
 - (done)allow to specify cookbooks and roles dir 
-- more node commands: -run multiple chef, -run(ssh or not), -has_file?, install_package, has_package?(gem, yum, deb...), -file_permission, -file_owner, service_running?, port_listening?
+- more node commands: -run multiple chef, -run_ssh, -has_file?, install_package, has_package?(gem, yum, deb...), -file_permission, -file_owner, service_running?, port_listening?
 - DSL - helpers
 - chef-client support
 - run ssh with script file
