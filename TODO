@@ -1,10 +1,9 @@
-- allow to specify cookbooks and roles dir 
-- more node commands: run multiple chef, run(ssh or not), has_file?, install_package, has_package?(gem, yum, deb...), file_permission, file_owner, run_ssh, run_shell, service_running?, port_listening?, 
-run_shell_script
+- (done)allow to specify cookbooks and roles dir 
+- more node commands: -run multiple chef, -run(ssh or not), has_file?, install_package, has_package?(gem, yum, deb...), file_permission, file_owner, service_running?, port_listening?, run_shell_script
 - more ubuntu version support, centos support
 - image package provision
 - ec2 support
-- (partially done)embed key rather than copying from root
+- (done)embed key rather than copying from root
 - (done)parameterize cookbook, role etc. path
 - DSL - helpers
 - logger level
