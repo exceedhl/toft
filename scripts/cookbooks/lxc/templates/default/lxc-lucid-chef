@@ -9,7 +9,7 @@ configure_ubuntu()
     mkdir $rootfs/root/.ssh
     chmod 0600 $rootfs/root/.ssh
 	cat <<-EOF > $rootfs/root/.ssh/authorized_keys
-ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC+5mgdJTbEQMn16lkOaGrmDfGnbV81mqPolq9+hGlce59+NihDM3b7aei1Z7KmsOt7y3GUBZVes3udncPA7dNmgOsFrVfHffERUeJ+UFbGUeJ4kKUkql03AkxUg4O2rD0epO7CuqYy5T51eeARKGKXsTuVoF6sh4DuyT/DS3/7+lCbdN56klYWc1mSXCKHxKQo90f81bhId2pxi73+5YnmUVAziK4+90THntS8J4+xgOis5VkO+2iFjd65GVCa9QIjlWPu8zwE+JB07e4lzMonxdReqIjrexBtwR4okdaz+6gjmxGHBVHtJjn8KsjStviAVj+ohG2M2464fuQnpbTd root insecure public key	
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDCguB7XL3ARzLZYLsIMZe4UUO371m+H5C6V8MhtmSlgXtgHDo7eZhNSm5zCeoyGd32OKeLxuxCCEkXfDDF1aa2a6twcASE3pmWNdnBS7auiOH4P7g+eQ4Aw9v7DdESbIVgHF/NDiAEFFdmApYNM3oCX2FhEVNVKxkkIokUr4axYFJzmJ6Xoi5Sd8JtPC85FZVXqDucZDnHQlOcCkbSo0UOmsWQGwtu8eUHoDeUG0dB8ntb9xlBeLctdrAPhuFYCX8IfFkdcakkzv61ETPbKE6g9wdTDC/TEep7/AHGYmarziRnwKiVOL1jnE1coOJLqy8wOC3dKGmRZy9D4sTc+FRV root insecure public key
 	EOF
 
 	# copy host resolve 
@@ -124,7 +124,7 @@ EOF
     chroot $rootfs /bin/bash -c 'cd /etc/init; for f in $(ls hwclock*.conf); do mv $f $f.orig; done'
     chroot $rootfs /bin/bash -c 'cd /etc/init; for f in $(ls module*.conf); do mv $f $f.orig; done'
 
-    echo "Please change root-password !"
+    echo "Set root password to 'root'"
     echo "root:root" | chroot $rootfs chpasswd
 
     return 0

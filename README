@@ -1,0 +1,10 @@
+introduction and ideas behind
+- the idea of testing infrastructure code
+- the idea of using lxc
+- using cucumber 
+
+quick start
+- prepare host machine
+ - use native linux or vagrant
+- install some dev packages on host machine
+- how to use toft in cucumber
