@@ -13,7 +13,7 @@ Vagrant::Config.run do |config|
     config.vm.share_folder("v-root1", "/home/vagrant/code", ".", :nfs => true)
     config.vm.provision :chef_solo do |chef|
       chef.cookbooks_path = "scripts/cookbooks"
-      chef.add_recipe("vagrant_main")
+      chef.add_recipe("lxc")
     end
   end
 end
