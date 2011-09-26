@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
 
   s.rubyforge_project = "tuft"
 
-  s.files         = `git ls-files`.split("\n")
+  s.files         = `git ls-files -- {features,fixtures,Gemfile,Gemfile.lock,Rakefile,lib,scripts,spec}`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
