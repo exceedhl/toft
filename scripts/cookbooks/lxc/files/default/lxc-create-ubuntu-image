@@ -39,8 +39,8 @@ mv "$cache/partial-$arch" "$cache/rootfs-$arch"
 echo "Download complete."
 
 # install chef
-cat <<EOF > "$cache/rootfs-$arch/tmp/install-chef.sh"
-echo "deb http://apt.opscode.com/ `lsb_release -cs`-0.10 main" | tee /etc/apt/sources.list.d/opscode.list
+cat <<EOF > "$cache/rootfs-$arch/tmp/install-chef-ubuntu.sh"
+echo "deb http://apt.opscode.com/ $suite-0.10 main" | tee /etc/apt/sources.list.d/opscode.list
 
 mkdir -p /etc/apt/trusted.gpg.d
 gpg --keyserver keys.gnupg.net --recv-keys 83EF826A
@@ -52,7 +52,7 @@ yes | apt-get install opscode-keyring --force-yes -y # permanent upgradeable key
 export DEBIAN_FRONTEND=noninteractive
 apt-get install chef --force-yes -qy
 EOF
-chroot "$cache/rootfs-$arch" bash /tmp/install-chef.sh
+chroot "$cache/rootfs-$arch" bash /tmp/install-chef-ubuntu.sh
 
 # compress root image
 (cd $cache/rootfs-$arch && tar zcf $suite-$arch.tar.gz .)

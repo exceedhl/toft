@@ -36,7 +36,7 @@ end
 
 bash "create ubuntu rootfs" do
   code <<-EOH
-/var/tmp/prepare-ubuntu-image.sh
+/usr/local/bin/lxc-create-ubuntu-image
 EOH
 end
  
