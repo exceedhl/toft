@@ -20,5 +20,6 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency "rspec"
   s.add_development_dependency "cucumber"
+  s.add_development_dependency "vagrant", ">=0.8.7"
   s.add_runtime_dependency "net-ssh"
 end

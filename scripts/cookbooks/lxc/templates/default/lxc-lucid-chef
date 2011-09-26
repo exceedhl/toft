@@ -164,7 +164,7 @@ install_ubuntu()
 	    arch=i386
 	fi
 
-	echo "Checking cache download in $cache/rootfs-$arch ... "
+	echo "Checking image cache in $cache/rootfs-$arch ... "
 	if [ ! -e "$cache/rootfs-$arch" ]; then
 	    if [ $? -ne 0 ]; then
 		echo "Failed to download 'ubuntu base'"

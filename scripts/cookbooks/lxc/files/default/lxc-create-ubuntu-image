@@ -1,6 +1,7 @@
 #!/bin/bash
 
 cache="/var/cache/lxc/ubuntu"
+suite=lucid
 
 arch=$(arch)
 if [ "$arch" == "x86_64" ]; then
@@ -11,7 +12,7 @@ if [ "$arch" == "i686" ]; then
     arch=i386
 fi
 
-if [ -e "$cache/lucid-$arch.tar.gz" ]; then
+if [ -e "$cache/$suite-$arch.tar.gz" ]; then
 	echo "Cache rootfs already exists!"
 	exit 0
 fi
@@ -28,7 +29,7 @@ fi
 
 # download a mini ubuntu into a cache
 echo "Downloading ubuntu minimal ..."
-debootstrap --verbose --variant=minbase --components=main,universe --arch=$arch --include=$packages lucid $cache/partial-$arch
+debootstrap --verbose --variant=minbase --components=main,universe --arch=$arch --include=$packages $suite $cache/partial-$arch
 if [ $? -ne 0 ]; then
 	echo "Failed to download the rootfs, aborting."
 	exit 1
@@ -54,7 +55,7 @@ EOF
 chroot "$cache/rootfs-$arch" bash /tmp/install-chef.sh
 
 # compress root image
-(cd $cache/rootfs-$arch && tar zcf lucid-$arch.tar.gz .)
-mv $cache/rootfs-$arch/lucid-$arch.tar.gz $cache
+(cd $cache/rootfs-$arch && tar zcf $suite-$arch.tar.gz .)
+mv $cache/rootfs-$arch/$suite-$arch.tar.gz $cache
 
 
