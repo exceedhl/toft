@@ -1,13 +1,13 @@
 $:.unshift(File.dirname(__FILE__) + '/../../lib')
 require 'rspec/expectations'
-require 'tuft'
+require 'toft'
 
-Tuft.cookbook_path = File.dirname(__FILE__) + '/../../fixtures/chef/cookbooks'
-Tuft.role_path = File.dirname(__FILE__) + '/../../fixtures/chef/roles'
+Toft.cookbook_path = File.dirname(__FILE__) + '/../../fixtures/chef/cookbooks'
+Toft.role_path = File.dirname(__FILE__) + '/../../fixtures/chef/roles'
 
-World(Tuft)
+World(Toft)
 
-include Tuft
+include Toft
 n1 = create_node "n1", "192.168.20.2"
 
 Before do

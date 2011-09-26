@@ -3,7 +3,7 @@ require 'cucumber/ast/table'
 
 describe "ChefAttributes" do
   it "should parse chef dot connected attributes" do
-    ca = Tuft::ChefAttributes.new(Cucumber::Ast::Table.new([[]]))
+    ca = Toft::ChefAttributes.new(Cucumber::Ast::Table.new([[]]))
     ca.add_attribute "one.two.three", "some"
     ca.add_attribute "one.four", "another"
     ca.attributes["one"]["two"]["three"].should == "some"
@@ -16,7 +16,7 @@ describe "ChefAttributes" do
               ["one.four", "one"],
               ["one.two.three", "some"]
             ])
-    ca = Tuft::ChefAttributes.new(table)
+    ca = Toft::ChefAttributes.new(table)
     ca.attributes["one"]["four"].should == "one"
     ca.attributes["one"]["two"]["three"].should == "some"
   end
@@ -27,7 +27,7 @@ describe "ChefAttributes" do
               ["one.four", "one"],
               ["one.two.three", "some"]
             ])
-    ca = Tuft::ChefAttributes.new(table)
+    ca = Toft::ChefAttributes.new(table)
     ca.to_json.should == "{\"one\":{\"two\":{\"three\":\"some\"},\"four\":\"one\"}}"
   end
 end

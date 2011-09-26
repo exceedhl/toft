@@ -11,11 +11,11 @@ When /^I run recipes on node "([^"]*)":$/ do |node, recipes_table|
 end
 
 When /^I run "([^"]*)" on node "([^"]*)" and overwrite attributes with:$/ do |run_list, node, table|
-  find(node).run_chef run_list, Tuft::ChefAttributes.new(table)
+  find(node).run_chef run_list, Toft::ChefAttributes.new(table)
 end
 
 When /^I set the role path to empty$/ do
-  Tuft.role_path = ""
+  Toft.role_path = ""
   @n1.rm "/tmp/*"
 end
 
@@ -26,7 +26,7 @@ Then /^Running chef "([^"]*)" on node "([^"]*)" should succeed$/ do |run_list, n
 end
 
 When /^I set the cookbook path to empty$/ do
-  Tuft.cookbook_path = ""
+  Toft.cookbook_path = ""
   @n1.rm "/tmp/*"  
 end
 

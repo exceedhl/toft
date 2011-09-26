@@ -1,4 +1,4 @@
-module Tuft
+module Toft
   class FileChecker
     def initialize(rootfs, path)
       @rootfs = rootfs

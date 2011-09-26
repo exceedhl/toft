@@ -1,4 +1,4 @@
-Feature: Checkers provided by Tuft to help you verify system state
+Feature: Checkers provided by Toft to help you verify system state
 
 Scenario: Dir checker
 	Given I have a clean running node "n1" with ip "192.168.20.2"

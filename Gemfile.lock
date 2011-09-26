@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    tuft (0.0.1)
+    toft (0.0.1)
       net-ssh
 
 GEM
@@ -35,4 +35,4 @@ PLATFORMS
 DEPENDENCIES
   cucumber
   rspec
-  tuft!
+  toft!

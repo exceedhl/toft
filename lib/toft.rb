@@ -1,9 +1,9 @@
-require 'tuft/node_controller'
-require 'tuft/file_checker'
-require 'tuft/chef/chef_attributes'
-require 'tuft/chef/chef_runner'
+require 'toft/node_controller'
+require 'toft/file_checker'
+require 'toft/chef/chef_attributes'
+require 'toft/chef/chef_runner'
 
-module Tuft
+module Toft
   class << self
     attr_accessor :cookbook_path, :role_path
   end

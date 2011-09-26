@@ -1,6 +1,6 @@
-require 'tuft/node'
+require 'toft/node'
 
-module Tuft
+module Toft
   class NodeController    
     attr_reader :nodes
     

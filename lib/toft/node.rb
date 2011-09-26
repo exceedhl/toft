@@ -1,9 +1,9 @@
 require 'observer'
 require 'net/ssh'
 require 'ping'
-require 'tuft/file_checker'
+require 'toft/file_checker'
 
-module Tuft
+module Toft
   class Node
     PRIVATE_KEY = <<-EOF
 -----BEGIN RSA PRIVATE KEY-----
@@ -44,7 +44,7 @@ u1StRY//+2thpgAgM6ILfHNkJW+3lQ6xnSNCVLKCIc6ECLukSKcZjg==
         conf_file = generate_lxc_config
         system "lxc-create -n #{hostname} -f #{conf_file} -t lucid-chef" 
       end
-      @chef_runner = Tuft::Chef::ChefRunner.new("#{rootfs}") do |chef_command|
+      @chef_runner = Toft::Chef::ChefRunner.new("#{rootfs}") do |chef_command|
         run_ssh chef_command
       end
     end

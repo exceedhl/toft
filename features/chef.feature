@@ -32,7 +32,7 @@ Scenario: Run chef role
 	When I run "role[test]" on node "n1"
 	Then Node "n1" should have file or directory "/tmp/stub/role"
 
-Scenario: Tuft should not deal with empty cookbook and role path
+Scenario: Toft should not deal with empty cookbook and role path
 	Given I have a clean running node "n1" with ip "192.168.20.2"
 	When I set the role path to empty
 	Then Running chef "recipe[test]" on node "n1" should succeed

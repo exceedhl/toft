@@ -1,6 +1,6 @@
 require 'json'
 
-module Tuft
+module Toft
   class ChefAttributes
     attr_reader :attributes
     

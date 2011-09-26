@@ -1,17 +1,17 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
-require "tuft/version"
+require "toft/version"
 
 Gem::Specification.new do |s|
-  s.name        = "tuft"
-  s.version     = Tuft::VERSION
+  s.name        = "toft"
+  s.version     = Toft::VERSION
   s.authors     = ["Huang Liang"]
   s.email       = ["exceedhl@gmail.com"]
-  s.homepage    = "https://github.com/exceedhl/tuft"
-  s.summary     = %q{tuft aims to help test infrastructure code such as chef}
-  s.description = %q{tuft currently support testing chef, shell scripts using cucumber on lxc on ubuntu}
+  s.homepage    = "https://github.com/exceedhl/toft"
+  s.summary     = %q{toft aims to help test infrastructure code such as chef}
+  s.description = %q{toft currently support testing chef, shell scripts using cucumber on lxc on ubuntu}
 
-  s.rubyforge_project = "tuft"
+  s.rubyforge_project = "toft"
 
   s.files         = `git ls-files -- {features,fixtures,Gemfile,Gemfile.lock,Rakefile,lib,scripts,spec}`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")

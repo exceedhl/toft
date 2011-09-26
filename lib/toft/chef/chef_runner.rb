@@ -1,12 +1,12 @@
-require 'tuft/chef/chef_attributes'
+require 'toft/chef/chef_attributes'
 require 'fileutils'
 
-module Tuft
+module Toft
   module Chef
     class ChefRunner
       include FileUtils
       
-      DEST_CHEF_TMP = "/tmp/tuft-chef-tmp"
+      DEST_CHEF_TMP = "/tmp/toft-chef-tmp"
       DEST_COOKBOOK_PATH = "#{DEST_CHEF_TMP}/cookbooks"
       DEST_ROLE_PATH = "#{DEST_CHEF_TMP}/roles"
       DEST_CHEF_SOLO_PATH = "#{DEST_CHEF_TMP}/solo.rb" 
@@ -28,12 +28,12 @@ module Tuft
       def copy_chef_material
         rm_rf "#{@root_dir}#{DEST_CHEF_TMP}"  
         mkdir_p "#{@root_dir}#{DEST_CHEF_TMP}"
-        cp_r Tuft.cookbook_path, "#{@root_dir}#{DEST_COOKBOOK_PATH}"
-        cp_r Tuft.role_path, "#{@root_dir}#{DEST_ROLE_PATH}" unless roles_missing?
+        cp_r Toft.cookbook_path, "#{@root_dir}#{DEST_COOKBOOK_PATH}"
+        cp_r Toft.role_path, "#{@root_dir}#{DEST_ROLE_PATH}" unless roles_missing?
       end
 
       def roles_missing?
-        Tuft.role_path.blank?
+        Toft.role_path.blank?
       end
 
       def generate_solo_rb
