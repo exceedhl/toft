@@ -34,7 +34,7 @@ cookbook_file "/usr/local/bin/lxc-create-ubuntu-image" do
   mode "0755"
 end
 
-bash "create ubuntu rootfs" do
+bash "create ubuntu rootfs image ... this will take a while" do
   code <<-EOH
 /usr/local/bin/lxc-create-ubuntu-image
 EOH
