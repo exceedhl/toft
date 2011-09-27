@@ -1,3 +1,5 @@
+#!/bin/bash
+
 function load_rvm {
 	cat <<-EOF >> ~/.profile
 [[ -s ~/.rvm/scripts/rvm ]] && . ~/.rvm/scripts/rvm
