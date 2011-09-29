@@ -36,7 +36,7 @@ end
 
 bash "create ubuntu rootfs image ... this will take a while" do
   code <<-EOH
-/usr/local/bin/lxc-create-ubuntu-image
+/usr/local/bin/lxc-create-ubuntu-image natty
 EOH
 end
  

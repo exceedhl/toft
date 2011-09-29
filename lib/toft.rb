@@ -8,8 +8,8 @@ module Toft
     attr_accessor :cookbook_path, :role_path
   end
   
-  def create_node(hostname, ip)
-    NodeController.instance.create_node(hostname, ip)
+  def create_node(hostname, ip, type)
+    NodeController.instance.create_node(hostname, ip, type)
   end
   
   def find(hostname)

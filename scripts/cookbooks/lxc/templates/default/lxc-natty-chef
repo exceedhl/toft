@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "Creating lucid node..."
+echo "Creating natty node..."
 
 configure_ubuntu()
 {
@@ -25,7 +25,7 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDCguB7XL3ARzLZYLsIMZe4UUO371m+H5C6V8MhtmSl
 	# add default route to host
 	cat <<EOF > $rootfs/etc/rc.local
 #!/bin/sh -e
-route add default gw 192.168.20.1
+route add default gw <%= node.network.gateway_ip %>
 exit 0
 EOF
 
@@ -42,91 +42,12 @@ EOF
 127.0.0.1 localhost $hostname
 EOF
 
-    # provide the lxc service
-    cat <<EOF > $rootfs/etc/init/lxc.conf
-# fake some events needed for correct startup other services
+    # suppress log level output for udev
+	sed -i "s/=\"err\"/=0/" $rootfs/etc/udev/udev.conf
 
-description     "Container Upstart"
-
-start on startup
-
-script
-        rm -rf /var/run/*.pid
-        rm -rf /var/run/network/*
-        /sbin/initctl emit stopped JOB=udevtrigger --no-wait
-        /sbin/initctl emit started JOB=udev --no-wait
-end script
-EOF
-
-    # fix buggus runlevel with sshd
-    cat <<EOF > $rootfs/etc/init/ssh.conf
-# ssh - OpenBSD Secure Shell server
-#
-# The OpenSSH server provides secure shell access to the system.
-
-description	"OpenSSH server"
-
-start on filesystem
-stop on runlevel [!2345]
-
-expect fork
-respawn
-respawn limit 10 5
-umask 022
-# replaces SSHD_OOM_ADJUST in /etc/default/ssh
-oom never
-
-pre-start script
-    test -x /usr/sbin/sshd || { stop; exit 0; }
-    test -e /etc/ssh/sshd_not_to_be_run && { stop; exit 0; }
-    test -c /dev/null || { stop; exit 0; }
-
-    mkdir -p -m0755 /var/run/sshd
-end script
-
-# if you used to set SSHD_OPTS in /etc/default/ssh, you can change the
-# 'exec' line here instead
-exec /usr/sbin/sshd
-EOF
-
-    cat <<EOF > $rootfs/etc/init/console.conf
-# console - getty
-#
-# This service maintains a console on tty1 from the point the system is
-# started until it is shut down again.
-
-start on stopped rc RUNLEVEL=[2345]
-stop on runlevel [!2345]
-
-respawn
-exec /sbin/getty -8 38400 /dev/console
-EOF
-
-    cat <<EOF > $rootfs/lib/init/fstab
-# /lib/init/fstab: lxc system fstab
-none            /spu                      spufs           gid=spu,optional                  0 0
-none            /tmp                      none            defaults                          0 0
-none            /var/lock                 tmpfs           nodev,noexec,nosuid,showthrough   0 0
-none            /lib/init/rw              tmpfs           mode=0755,nosuid,optional         0 0
-EOF
-
-    # reconfigure some services
-    if [ -z "$LANG" ]; then
-		chroot $rootfs locale-gen en_US.UTF-8
-		chroot $rootfs update-locale LANG=en_US.UTF-8
-    else
-		chroot $rootfs locale-gen $LANG
-		chroot $rootfs update-locale LANG=$LANG
-    fi
-
-    # remove pointless services in a container
-    chroot $rootfs /usr/sbin/update-rc.d -f ondemand remove
-
-    chroot $rootfs /bin/bash -c 'cd /etc/init; for f in $(ls u*.conf); do mv $f $f.orig; done'
-    chroot $rootfs /bin/bash -c 'cd /etc/init; for f in $(ls tty[2-9].conf); do mv $f $f.orig; done'
-    chroot $rootfs /bin/bash -c 'cd /etc/init; for f in $(ls plymouth*.conf); do mv $f $f.orig; done'
-    chroot $rootfs /bin/bash -c 'cd /etc/init; for f in $(ls hwclock*.conf); do mv $f $f.orig; done'
-    chroot $rootfs /bin/bash -c 'cd /etc/init; for f in $(ls module*.conf); do mv $f $f.orig; done'
+	# remove jobs for consoles 5 and 6 since we only create 4 consoles in
+	# this template
+	rm -f $rootfs/etc/init/tty{5,6}.conf
 
     echo "Set root password to 'root'"
     echo "root:root" | chroot $rootfs chpasswd
@@ -143,7 +64,7 @@ copy_ubuntu()
     # make a local copy of the miniubuntu
     echo "Extracting rootfs image to $rootfs ..."
     mkdir $rootfs
-    tar zxf $cache/lucid-$arch.tar.gz -C $rootfs || return 1
+    tar zxf $cache/natty-$arch.tar.gz -C $rootfs || return 1
     return 0
 }
 
@@ -210,8 +131,8 @@ lxc.cgroup.devices.allow = c 1:5 rwm
 # consoles
 lxc.cgroup.devices.allow = c 5:1 rwm
 lxc.cgroup.devices.allow = c 5:0 rwm
-lxc.cgroup.devices.allow = c 4:0 rwm
-lxc.cgroup.devices.allow = c 4:1 rwm
+# lxc.cgroup.devices.allow = c 4:0 rwm
+# lxc.cgroup.devices.allow = c 4:1 rwm
 # /dev/{,u}random
 lxc.cgroup.devices.allow = c 1:9 rwm
 lxc.cgroup.devices.allow = c 1:8 rwm

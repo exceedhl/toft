@@ -8,7 +8,7 @@ Toft.role_path = File.dirname(__FILE__) + '/../../fixtures/chef/roles'
 World(Toft)
 
 include Toft
-n1 = create_node "n1", "192.168.20.2"
+n1 = create_node "n1", "192.168.20.2", :natty
 
 Before do
   @n1 = n1
