@@ -25,7 +25,7 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDCguB7XL3ARzLZYLsIMZe4UUO371m+H5C6V8MhtmSl
 	# add default route to host
 	cat <<EOF > $rootfs/etc/rc.local
 #!/bin/sh -e
-route add default gw 192.168.20.1
+route add default gw <%= node.network.gateway_ip %>
 exit 0
 EOF
 

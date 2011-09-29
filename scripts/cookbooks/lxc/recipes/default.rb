@@ -29,6 +29,12 @@ template "/usr/lib/lxc/templates/lxc-lucid-chef" do
   action :create
 end
 
+template "/usr/lib/lxc/templates/lxc-natty-chef" do
+  source "lxc-natty-chef"
+  mode "0755"
+  action :create
+end
+
 cookbook_file "/usr/local/bin/lxc-create-ubuntu-image" do
   source "lxc-create-ubuntu-image"
   mode "0755"
