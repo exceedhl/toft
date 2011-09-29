@@ -28,29 +28,31 @@ if [ -e "$cache/$suite-$arch.tar.gz" ]; then
 	exit 0
 fi
 
-chef_packages=ruby,rubygems1.8,ruby-dev,libopenssl-ruby,build-essential,wget,ssl-cert
-packages=dialog,apt,apt-utils,resolvconf,iproute,inetutils-ping,dhcp3-client,ssh,lsb-release,wget,gpgv,gnupg,sudo,$chef_packages
-
+lucid_packages=dialog,apt,apt-utils,resolvconf,iproute,inetutils-ping,dhcp3-client,ssh,lsb-release,wget,gpgv,gnupg,sudo,ruby,rubygems1.8,ruby-dev,libopenssl-ruby,build-essential,wget,ssl-cert
+natty_packages=dialog,apt,apt-utils,resolvconf,iproute,inetutils-ping,isc-dhcp-client,isc-dhcp-common,ssh,lsb-release,gnupg,netbase,lxcguest,sudo,ruby,rubygems1.8,ruby-dev,libruby,build-essential,wget,ssl-cert
 # check the mini ubuntu was not already downloaded
-mkdir -p "$cache/partial-$arch"
+rm -rf "$cache/$suite-$arch"
+mkdir -p "$cache/$suite-$arch"
 if [ $? -ne 0 ]; then
-	echo "Failed to create '$cache/partial-$arch' directory"
+	echo "Failed to create '$cache/$suite-$arch' directory"
 	exit 1
 fi
 
 # download a mini ubuntu into a cache
 echo "Downloading ubuntu minimal ..."
-debootstrap --verbose --variant=minbase --components=main,universe --arch=$arch --include=$packages $suite $cache/partial-$arch
+eval "packages=\$${suite}_packages"
+cmd="debootstrap --verbose --variant=minbase --components=main,universe --arch=$arch --include=$packages $suite $cache/$suite-$arch"
+echo $cmd
+eval $cmd
 if [ $? -ne 0 ]; then
 	echo "Failed to download the rootfs, aborting."
 	exit 1
 fi
 
-mv "$cache/partial-$arch" "$cache/rootfs-$arch"
 echo "Download complete."
 
 # install chef
-cat <<EOF > "$cache/rootfs-$arch/tmp/install-chef-ubuntu.sh"
+cat <<EOF > "$cache/$suite-$arch/tmp/install-chef-ubuntu.sh"
 echo "deb http://apt.opscode.com/ $suite-0.10 main" | tee /etc/apt/sources.list.d/opscode.list
 
 mkdir -p /etc/apt/trusted.gpg.d
@@ -63,10 +65,11 @@ yes | apt-get install opscode-keyring --force-yes -y # permanent upgradeable key
 export DEBIAN_FRONTEND=noninteractive
 apt-get install chef --force-yes -qy
 EOF
-chroot "$cache/rootfs-$arch" bash /tmp/install-chef-ubuntu.sh
+chroot "$cache/$suite-$arch" bash /tmp/install-chef-ubuntu.sh
 
 # compress root image
-(cd $cache/rootfs-$arch && tar zcf $suite-$arch.tar.gz .)
-mv $cache/rootfs-$arch/$suite-$arch.tar.gz $cache
+echo "Packaging rootfs ..."
+(cd $cache/$suite-$arch && tar zcf $suite-$arch.tar.gz .)
+mv $cache/$suite-$arch/$suite-$arch.tar.gz $cache
 
 

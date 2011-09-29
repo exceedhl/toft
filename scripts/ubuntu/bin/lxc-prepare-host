@@ -1,5 +1,11 @@
 #!/bin/bash
 
+username=`id -nu`	
+if [ ! "$username" = "root" ]; then
+	echo "This command has to be run as root!"
+	exit 1
+fi
+
 apt-get install lxc bridge-utils debootstrap
 
 if [[ ! `ip link ls dev br0` ]]; then

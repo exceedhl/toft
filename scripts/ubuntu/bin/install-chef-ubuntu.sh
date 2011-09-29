@@ -1,5 +1,11 @@
 #!/bin/bash
 
+username=`id -nu`	
+if [ ! "$username" = "root" ]; then
+	echo "This command has to be run as root!"
+	exit 1
+fi
+
 echo "deb http://apt.opscode.com/ `lsb_release -cs`-0.10 main" | tee /etc/apt/sources.list.d/opscode.list
 
 mkdir -p /etc/apt/trusted.gpg.d
