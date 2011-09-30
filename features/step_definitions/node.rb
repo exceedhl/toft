@@ -1,11 +1,11 @@
 Given /^I have a clean running node "([^"]*)" with ip "([^"]*)"$/ do |node, ip|
-  create_node node, ip, :natty
+  create_node node, ip, :centos6
   @n1.start
   @n1.rm "/tmp/stub"
 end
 
 When /^I add another node "([^"]*)" with ip "([^"]*)"$/ do |node, ip|
-  create_node node, ip, :natty
+  create_node node, ip, :centos6
 end
 
 When /^I destroy node "([^"]*)"$/ do |node|

@@ -42,7 +42,7 @@ CQWv13UgQjiHgQILXSb7xdzpWK1wpDoqIEWQugRyPQDeZhPWVbB4Lg==
       @ip = ip
       unless exists?
         conf_file = generate_lxc_config
-        system "lxc-create -n #{hostname} -f #{conf_file} -t #{type.to_s}-chef" 
+        system "lxc-create -n #{hostname} -f #{conf_file} -t #{type.to_s}" 
       end
       @chef_runner = Toft::Chef::ChefRunner.new("#{rootfs}") do |chef_command|
         run_ssh chef_command
