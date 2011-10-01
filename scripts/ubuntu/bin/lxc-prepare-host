@@ -6,7 +6,7 @@ if [ ! "$username" = "root" ]; then
 	exit 1
 fi
 
-apt-get install lxc bridge-utils debootstrap
+apt-get install -y lxc bridge-utils debootstrap
 
 if [[ ! `ip link ls dev br0` ]]; then
 	brctl addbr br0

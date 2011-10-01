@@ -78,17 +78,18 @@ CQWv13UgQjiHgQILXSb7xdzpWK1wpDoqIEWQugRyPQDeZhPWVbB4Lg==
     def run_ssh(command)
       raise ArgumentError, "Trying to run empty command on node #{@hostname}", caller if command.blank?
       output = ""
+      error = false
       Net::SSH.start(@ip, "root", :key_data => [PRIVATE_KEY]) do |ssh|
         ssh.exec! command do |ch, stream, data|
           if stream == :stderr
-            raise RuntimeError, data, caller
-          else
-            output += data
+            error = true
           end
+          output += data
         end
       end
+      raise RuntimeError, output, caller if error
       puts output
-      yield output if block_given?
+      return yield output if block_given?
       return true
     end
 

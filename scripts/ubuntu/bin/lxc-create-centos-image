@@ -1,0 +1,56 @@
+#!/bin/bash
+
+if [ $# -eq 0 ]; then
+	echo "Usage: `basename $0` <centos-6|centos-5|centos-4>"
+	exit 1
+fi
+
+username=`id -nu`	
+if [ ! "$username" = "root" ]; then
+	echo "This command has to be run as root!"
+	exit 1
+fi
+
+cache="/var/cache/lxc/centos"
+suite=$1
+
+arch=$(arch)
+if [ "$arch" == "i686" ]; then
+    arch=i386
+fi
+
+if [ -e "$cache/$suite-$arch.tar.gz" ]; then
+	echo "Cache rootfs already exists!"
+	exit 0
+fi
+
+# install latest rinse
+if [[ ! `type rinse` ]]; then
+	echo "Rinse does not exist. Installing..."
+	(cd /tmp && \
+	wget http://www.steve.org.uk/Software/rinse/rinse-1.9.1.tar.gz && \
+	tar zxf rinse-1.9.1.tar.gz && \
+	cd rinse-1.9.1 && \
+	make install)
+fi
+
+# install rpm
+apt-get install -y rpm
+
+# create centos image using rinse
+cat <<EOF > /tmp/after_post_install
+chroot $cache/$suite-$arch rpm -Uvh http://rbel.co/rbel6
+chroot $cache/$suite-$arch yum -y install man sudo openssh-server openssh-clients rubygem-chef
+EOF
+chmod +x /tmp/after_post_install
+
+echo "Creating $suite-$arch image"
+rinse --config /etc/rinse/rinse.conf \
+	--arch=$arch --distribution=$suite \
+	--directory=$cache/$suite-$arch \
+	--after-post-install=/tmp/after_post_install
+
+# compress root image
+echo "Packaging rootfs ..."
+(cd $cache/$suite-$arch && tar zcf $suite-$arch.tar.gz .)
+mv $cache/$suite-$arch/$suite-$arch.tar.gz $cache
