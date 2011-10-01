@@ -23,26 +23,20 @@ mount "/cgroup" do
   action [:mount, :enable]
 end
 
-template "/usr/lib/lxc/templates/lxc-lucid-chef" do
-  source "lxc-lucid-chef"
+template "/usr/lib/lxc/templates/lxc-lucid" do
+  source "lxc-lucid"
   mode "0755"
   action :create
 end
 
-template "/usr/lib/lxc/templates/lxc-natty-chef" do
-  source "lxc-natty-chef"
+template "/usr/lib/lxc/templates/lxc-natty" do
+  source "lxc-natty"
   mode "0755"
   action :create
 end
 
-cookbook_file "/usr/local/bin/lxc-create-ubuntu-image" do
-  source "lxc-create-ubuntu-image"
+template "/usr/lib/lxc/templates/lxc-centos-6" do
+  source "lxc-centos-6"
   mode "0755"
+  action :create
 end
-
-bash "create ubuntu rootfs image ... this will take a while" do
-  code <<-EOH
-/usr/local/bin/lxc-create-ubuntu-image natty
-EOH
-end
- 

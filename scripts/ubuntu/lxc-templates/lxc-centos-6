@@ -97,7 +97,7 @@ copy_centos()
 
 install_centos()
 {
-    cache="/var/cache/lxc/centos"
+    cache="/var/cache/lxc"
     rootfs=$1
     mkdir -p /var/lock/subsys/
     (
@@ -108,6 +108,10 @@ install_centos()
 	fi
 
 	arch=$(arch)
+	if [ "$arch" == "x86_64" ]; then
+	    arch=amd64
+	fi
+
 	if [ "$arch" == "i686" ]; then
 	    arch=i386
 	fi
@@ -194,7 +198,7 @@ EOF
 
 clean()
 {
-    cache="/var/cache/lxc/centos"
+    cache="/var/cache/lxc"
 
     if [ ! -e $cache ]; then
 	exit 0

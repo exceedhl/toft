@@ -149,7 +149,7 @@ copy_ubuntu()
 
 install_ubuntu()
 {
-    cache="/var/cache/lxc/ubuntu"
+    cache="/var/cache/lxc"
     rootfs=$1
     mkdir -p /var/lock/subsys/
     (
@@ -237,7 +237,7 @@ EOF
 
 clean()
 {
-    cache="/var/cache/lxc/ubuntu"
+    cache="/var/cache/lxc"
 
     if [ ! -e $cache ]; then
 	exit 0

@@ -11,7 +11,7 @@ if [ ! "$username" = "root" ]; then
 	exit 1
 fi
 
-cache="/var/cache/lxc/ubuntu"
+cache="/var/cache/lxc"
 suite=$1
 
 arch=$(arch)

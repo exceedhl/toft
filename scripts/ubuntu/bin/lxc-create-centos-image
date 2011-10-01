@@ -11,10 +11,14 @@ if [ ! "$username" = "root" ]; then
 	exit 1
 fi
 
-cache="/var/cache/lxc/centos"
+cache="/var/cache/lxc"
 suite=$1
 
 arch=$(arch)
+if [ "$arch" == "x86_64" ]; then
+    arch=amd64
+fi
+
 if [ "$arch" == "i686" ]; then
     arch=i386
 fi

@@ -3,11 +3,12 @@ Vagrant::Config.run do |config|
     config.vm.box = "ubuntu-1104-server-i386"
     config.vm.network "33.33.33.11"
     config.vm.share_folder("v-root2", "/home/vagrant/code", ".", :nfs => true)
-    config.vm.provision :shell, :path => "scripts/ubuntu/bin/install-chef-ubuntu.sh"
-    config.vm.provision :chef_solo do |chef|
-      chef.cookbooks_path = "scripts/cookbooks"
-      chef.add_recipe("lxc")
-    end
+  end
+  
+  config.vm.define :ubuntu64 do |config|
+    config.vm.box = "ubuntu-1104-server-amd64"
+    config.vm.network "33.33.33.14"
+    config.vm.share_folder("v-root4", "/home/vagrant/code", ".", :nfs => true)
   end
 
   config.vm.define :centos6i386 do |config|
