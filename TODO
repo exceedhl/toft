@@ -1,14 +1,23 @@
+- print ssh output as it go rather than at the end of the execution
+- add cnames for container
+- add hosts entry for containers
+- hook lxc containers with bigger network
+- initialize chef attributes in other way
+- support run chef with json file
+- encapsulate scripts into gem, provide command tool
+- support running lxc on other linux boxes
+- allow vm network/ip configuration
+- dhcp
+- run ssh with script file
 - (done)allow to specify cookbooks and roles dir 
 - more node commands: -run multiple chef, -run_ssh, -has_file?, install_package, has_package?(gem, yum, deb...), -file_permission, -file_owner, service_running?, port_listening?
 - (done)DSL - helpers
 - (done)fix bug: node.destroy will not decrease node count
-- some use documentation
-- optimize lxc rootfs creation time(mostly copying files)
+- (done)some documentation
+- (done)optimize lxc rootfs creation time(mostly copying files)
 - chef-client support
-- run ssh with script file
-- more ubuntu version support, centos support
-- allow vm network/ip configuration
-- image package provision
+- (done)more ubuntu version support, centos support
+- (done)image package provision
 - ec2 support
 - (done)embed key rather than copying from root
 - (done)parameterize cookbook, role etc. path
@@ -17,3 +26,4 @@
 - puppet support
 - logger level
 - extract out different modules
+

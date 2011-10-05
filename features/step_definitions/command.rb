@@ -15,7 +15,9 @@ Then /^Rm "([^"]*)" on "([^"]*)" should succeed$/ do |dir, node|
 end
 
 Then /^the result of running ssh command "([^"]*)" on "([^"]*)" should contain "([^"]*)"$/ do |cmd, node, s|
-  find(node).run_ssh(cmd) do |output|
-    output.should include(s)
+  output = ""
+  find(node).run_ssh(cmd) do |data|
+    output += data
   end
+  output.should include(s)
 end
