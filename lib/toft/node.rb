@@ -90,6 +90,14 @@ CQWv13UgQjiHgQILXSb7xdzpWK1wpDoqIEWQugRyPQDeZhPWVbB4Lg==
       raise RuntimeError, "Error happened while executing command [#{command}]!", caller if error
       return true
     end
+    
+    def get_ssh_result(cmd)
+      output = ""
+      run_ssh(cmd) do |data|
+        output += data
+      end
+      return output
+    end
 
     def rm(dir)
       raise ArgumentError, "Illegal dir path: [#{dir}]", caller if dir.blank? || dir[0] != ?/
