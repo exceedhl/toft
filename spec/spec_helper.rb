@@ -1,4 +1,6 @@
 $:.unshift(File.dirname(__FILE__) + '/../lib')
 $:.unshift(File.dirname(__FILE__))
 
-require 'toft/chef/chef_attributes'
+PROJECT_ROOT = File.dirname(__FILE__) + '/..'
+
+require 'toft'

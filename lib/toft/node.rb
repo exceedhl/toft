@@ -104,8 +104,8 @@ CQWv13UgQjiHgQILXSb7xdzpWK1wpDoqIEWQugRyPQDeZhPWVbB4Lg==
       system "rm -rf #{rootfs}#{dir}"
     end
 
-    def run_chef(run_list, chef_attributes = nil)
-      @chef_runner.run run_list, chef_attributes
+    def run_chef(run_list, params = {})
+      @chef_runner.run run_list, params
     end
 
     def file(path)

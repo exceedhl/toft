@@ -7,11 +7,11 @@ When /^I run recipes on node "([^"]*)":$/ do |node, recipes_table|
   recipes_table.hashes.each do |row|
     recipes << row[:recipe]
   end
-  find(node).run_chef recipes  
+  find(node).run_chef recipes
 end
 
 When /^I run "([^"]*)" on node "([^"]*)" and overwrite attributes with:$/ do |run_list, node, table|
-  find(node).run_chef run_list, Toft::ChefAttributes.new(table)
+  find(node).run_chef run_list, {:attributes => Toft::ChefAttributes.new(table)}
 end
 
 When /^I set the role path to empty$/ do
@@ -32,4 +32,12 @@ end
 
 Then /^Running chef "([^"]*)" on node "([^"]*)" should fail$/ do |run_list, node|
   lambda { find(node).run_chef(run_list) }.should raise_error
+end
+
+When /^I run "([^"]*)" on node "([^"]*)" and overwrite attributes with json file "([^"]*)"$/ do |run_list, node, json_file|
+  find(node).run_chef run_list, :json => CHEF_FIXTURE_PATH + '/attributes.json'
+end
+
+When /^I run "([^"]*)" on node "([^"]*)" and overwrite attributes with json file "([^"]*)" and chef attributes:$/ do |run_list, node, json_file, table|
+  find(node).run_chef run_list, {:json => CHEF_FIXTURE_PATH + '/attributes.json', :attributes => Toft::ChefAttributes.new(table)}
 end

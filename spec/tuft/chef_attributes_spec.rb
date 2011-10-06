@@ -30,4 +30,10 @@ describe "ChefAttributes" do
     ca = Toft::ChefAttributes.new(table)
     ca.to_json.should == "{\"one\":{\"two\":{\"three\":\"some\"},\"four\":\"one\"}}"
   end
+  
+  it "should initialize with 0 parameter" do
+    ca =  Toft::ChefAttributes.new
+    ca.add_attribute "one.four", "one"
+    ca.attributes["one"]["four"].should == "one"
+  end
 end
