@@ -42,9 +42,15 @@ fi
 apt-get install -y rpm
 
 # create centos image using rinse
+cat <<EOF > /tmp/pkg-list
+tar
+man
+sudo
+EOF
+
 cat <<EOF > /tmp/after_post_install
 chroot $cache/$suite-$arch rpm -Uvh http://rbel.co/rbel6
-chroot $cache/$suite-$arch yum -y install man sudo openssh-server openssh-clients rubygem-chef
+chroot $cache/$suite-$arch yum -y install openssh-server openssh-clients rubygem-chef
 EOF
 chmod +x /tmp/after_post_install
 
@@ -53,6 +59,7 @@ rinse --config /etc/rinse/rinse.conf \
 	--arch=$arch --distribution=$suite \
 	--directory=$cache/$suite-$arch \
 	--after-post-install=/tmp/after_post_install
+	--add-pkg-list=/tmp/pkg-list
 
 # compress root image
 echo "Packaging rootfs ..."

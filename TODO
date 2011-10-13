@@ -1,13 +1,13 @@
 - (done)print ssh output as it go rather than at the end of the execution
+- allow vm network/ip configuration
+- dhcp
 - add cnames for container
 - add hosts entry for containers
 - hook lxc containers with bigger network
 - initialize chef attributes in other way
-- support run chef with json file
+- (done)support run chef with json file
 - encapsulate scripts into gem, provide command tool
 - support running lxc on other linux boxes
-- allow vm network/ip configuration
-- dhcp
 - run ssh with script file
 - (done)allow to specify cookbooks and roles dir 
 - more node commands: -run multiple chef, -run_ssh, -has_file?, install_package, has_package?(gem, yum, deb...), -file_permission, -file_owner, service_running?, port_listening?
