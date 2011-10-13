@@ -6,15 +6,30 @@ if [ ! "$username" = "root" ]; then
 	exit 1
 fi
 
-apt-get install -y lxc bridge-utils debootstrap
+gateway_ip="192.168.20.1"
+subnet="192.168.20.0"
+netmask="255.255.255.0"
+range="192.168.20.2 192.168.20.254"
+domain=foo
 
+# disable apparmor
+/etc/init.d/apparmor teardown
+/etc/init.d/apparmor stop
+update-rc.d -f apparmor remove
+aptitude remove apparmor apparmor-utils
+
+# install nameserver, dhcp server, ntp etc.
+apt-get install -y lxc bridge-utils debootstrap dhcp3-server bind9 ntp
+
+# setup bridge and nat
 if [[ ! `ip link ls dev br0` ]]; then
 	brctl addbr br0
-	ifconfig br0 192.168.20.1 netmask 255.255.255.0 up
+	ifconfig br0 $gateway_ip netmask 255.255.255.0 up
 	iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 	sysctl -w net.ipv4.ip_forward=1
 fi
 
+# setup cgroup
 if [[ ! -d /cgroup ]]; then
 	mkdir -p /cgroup
 fi
@@ -22,3 +37,66 @@ fi
 if [[ ! `mount | grep cgroup` ]]; then
 	mount none -t cgroup /cgroup
 fi
+
+# setup nameserver
+cat <<EOF > /etc/bind/db.foo
+\$ORIGIN $domain.
+\$TTL 7200	; 2 hours
+@				IN SOA	ns1.$domain. hostmaster.$domain. (
+				3641625943 ; serial
+				36000      ; refresh (10 hours)
+				900        ; retry (15 minutes)
+				36000      ; expire (10 hours)
+				7200       ; minimum (2 hours)
+				)
+			NS	ns1.$domain.
+ns1		A	$gateway_ip
+EOF
+
+cat <<EOF > /etc/bind/named.conf.$domain
+zone "$domain" in{
+	type master;
+	file "/etc/bind/db.$domain";
+	allow-update {any;};
+};
+EOF
+
+if [[ ! `grep "named.conf.$domain" /etc/bind/named.conf` ]]; then
+	cat <<EOF >> /etc/bind/named.conf
+include "/etc/bind/named.conf.$domain";
+EOF
+	
+fi
+
+sudo chmod 775 /etc/bind
+
+/etc/init.d/bind9 restart
+
+# setup dhcp server
+mv /etc/dhcp/dhcpd.conf /etc/dhcp/dhcpd.conf.old
+cat <<EOF > /etc/dhcp/dhcpd.conf
+ddns-updates on;
+ddns-update-style interim;
+
+ddns-domainname "$domain.";
+option domain-name "$domain.";
+option domain-name-servers $gateway_ip;
+
+option ntp-servers $gateway_ip;
+default-lease-time 600;
+max-lease-time 7200;
+
+authoritative;
+log-facility local7;
+
+zone $domain {
+   primary localhost;
+}
+
+subnet $subnet netmask $netmask {
+   range $range;
+   option routers $gateway_ip;
+}
+EOF
+sudo /etc/init.d/isc-dhcp-server restart
+

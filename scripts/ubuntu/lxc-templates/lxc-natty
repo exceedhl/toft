@@ -7,25 +7,45 @@ configure_ubuntu()
     rootfs=$1
     hostname=$2
 
-	# disable selinux in ubuntu
+		# disable selinux in ubuntu
     mkdir -p $rootfs/selinux
     echo 0 > $rootfs/selinux/enforce
 
-	# add host root ssh access
+		# add host root ssh access
     mkdir $rootfs/root/.ssh
     chmod 0600 $rootfs/root/.ssh
-	cat <<-EOF > $rootfs/root/.ssh/authorized_keys
+		cat <<-EOF > $rootfs/root/.ssh/authorized_keys
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDCguB7XL3ARzLZYLsIMZe4UUO371m+H5C6V8MhtmSlgXtgHDo7eZhNSm5zCeoyGd32OKeLxuxCCEkXfDDF1aa2a6twcASE3pmWNdnBS7auiOH4P7g+eQ4Aw9v7DdESbIVgHF/NDiAEFFdmApYNM3oCX2FhEVNVKxkkIokUr4axYFJzmJ6Xoi5Sd8JtPC85FZVXqDucZDnHQlOcCkbSo0UOmsWQGwtu8eUHoDeUG0dB8ntb9xlBeLctdrAPhuFYCX8IfFkdcakkzv61ETPbKE6g9wdTDC/TEep7/AHGYmarziRnwKiVOL1jnE1coOJLqy8wOC3dKGmRZy9D4sTc+FRV root insecure public key
-	EOF
+EOF
+	
+		gateway_ip="192.168.20.1"
+		domain=foo
+	
+		cat <<EOF > $rootfs/etc/rc.local
+#!/bin/bash
 
-	# copy host resolve 
-    rm $rootfs/etc/resolv.conf
-    cp /etc/resolv.conf $rootfs/etc/resolv.conf
+ip=\`ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print \$1}'\`
+if [[ -n \$ip ]] ; then # if manually set ip address
+	# use host dns server
+	rm /etc/resolv.conf
+	cat <<END > /etc/resolv.conf
+nameserver $gateway_ip
+domain $domain
+search $domain
+END
+		
+	# add default route to host and update ns
+	cat <<END > /tmp/nsupdate.txt
+server $gateway_ip
+update add ${hostname}.$domain	86400 A \$ip
+send
+END
 
-	# add default route to host
-	cat <<EOF > $rootfs/etc/rc.local
-#!/bin/sh -e
-route add default gw 192.168.20.1
+	route add default gw 192.168.20.1
+	nsupdate /tmp/nsupdate.txt
+else # if ip not set, use dhcp
+	/sbin/dhclient eth0
+fi
 exit 0
 EOF
 
@@ -39,15 +59,15 @@ $hostname
 EOF
     # set minimal hosts
     cat <<EOF > $rootfs/etc/hosts
-127.0.0.1 localhost $hostname
+127.0.0.1 $hostname localhost
 EOF
 
     # suppress log level output for udev
-	sed -i "s/=\"err\"/=0/" $rootfs/etc/udev/udev.conf
+		sed -i "s/=\"err\"/=0/" $rootfs/etc/udev/udev.conf
 
-	# remove jobs for consoles 5 and 6 since we only create 4 consoles in
-	# this template
-	rm -f $rootfs/etc/init/tty{5,6}.conf
+		# remove jobs for consoles 5 and 6 since we only create 4 consoles in
+		# this template
+		rm -f $rootfs/etc/init/tty{5,6}.conf
 
     echo "Set root password to 'root'"
     echo "root:root" | chroot $rootfs chpasswd
@@ -74,38 +94,38 @@ install_ubuntu()
     rootfs=$1
     mkdir -p /var/lock/subsys/
     (
-	flock -n -x 200
-	if [ $? -ne 0 ]; then
-	    echo "Cache repository is busy."
-	    return 1
-	fi
+			flock -n -x 200
+			if [ $? -ne 0 ]; then
+			    echo "Cache repository is busy."
+			    return 1
+			fi
 
-	arch=$(arch)
-	if [ "$arch" == "x86_64" ]; then
-	    arch=amd64
-	fi
+			arch=$(arch)
+			if [ "$arch" == "x86_64" ]; then
+			    arch=amd64
+			fi
 
-	if [ "$arch" == "i686" ]; then
-	    arch=i386
-	fi
+			if [ "$arch" == "i686" ]; then
+			    arch=i386
+			fi
 
-	echo "Checking image cache in $cache/rootfs-$arch ... "
-	if [ ! -e "$cache/rootfs-$arch" ]; then
-	    if [ $? -ne 0 ]; then
-		echo "Failed to download 'ubuntu base'"
-		return 1
-	    fi
-	fi
+			echo "Checking image cache in $cache/rootfs-$arch ... "
+			if [ ! -e "$cache/rootfs-$arch" ]; then
+			    if [ $? -ne 0 ]; then
+				echo "Failed to download 'ubuntu base'"
+				return 1
+			    fi
+			fi
 
-	copy_ubuntu $cache $arch $rootfs
-	if [ $? -ne 0 ]; then
-	    echo "Failed to copy rootfs"
-	    return 1
-	fi
+			copy_ubuntu $cache $arch $rootfs
+			if [ $? -ne 0 ]; then
+			    echo "Failed to copy rootfs"
+			    return 1
+			fi
 
-	return 0
+			return 0
 
-	) 200>/var/lock/subsys/lxc
+		) 200>/var/lock/subsys/lxc
 
     return $?
 }
@@ -149,8 +169,8 @@ sysfs           $rootfs/sys          sysfs defaults  0 0
 EOF
 
     if [ $? -ne 0 ]; then
-	echo "Failed to add configuration"
-	return 1
+			echo "Failed to add configuration"
+			return 1
     fi
 
     return 0
@@ -166,16 +186,15 @@ clean()
 
     # lock, so we won't purge while someone is creating a repository
     (
-	flock -n -x 200
-	if [ $? != 0 ]; then
-	    echo "Cache repository is busy."
-	    exit 1
-	fi
+			flock -n -x 200
+			if [ $? != 0 ]; then
+			    echo "Cache repository is busy."
+			    exit 1
+			fi
 
-	echo -n "Purging the download cache..."
-	rm --preserve-root --one-file-system -rf $cache && echo "Done." || exit 1
-	exit 0
-
+			echo -n "Purging the download cache..."
+			rm --preserve-root --one-file-system -rf $cache && echo "Done." || exit 1
+			exit 0
     ) 200>/var/lock/subsys/lxc
 }
 
@@ -197,11 +216,11 @@ eval set -- "$options"
 while true
 do
     case "$1" in
-	-h|--help)      usage $0 && exit 0;;
-	-p|--path)      path=$2; shift 2;;
-	-n|--name)      name=$2; shift 2;;
-	-c|--clean)     clean=$2; shift 2;;
-	--)             shift 1; break ;;
+				-h|--help)      usage $0 && exit 0;;
+				-p|--path)      path=$2; shift 2;;
+				-n|--name)      name=$2; shift 2;;
+				-c|--clean)     clean=$2; shift 2;;
+				--)             shift 1; break ;;
         *)              break ;;
     esac
 done

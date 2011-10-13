@@ -28,8 +28,8 @@ if [ -e "$cache/$suite-$arch.tar.gz" ]; then
 	exit 0
 fi
 
-lucid_packages=dialog,apt,apt-utils,resolvconf,iproute,inetutils-ping,dhcp3-client,ssh,lsb-release,wget,gpgv,gnupg,sudo,ruby,rubygems1.8,ruby-dev,libopenssl-ruby,build-essential,ssl-cert
-natty_packages=dialog,apt,apt-utils,resolvconf,iproute,inetutils-ping,isc-dhcp-client,isc-dhcp-common,ssh,lsb-release,gnupg,netbase,lxcguest,sudo,ruby,rubygems1.8,ruby-dev,libruby,build-essential,wget,ssl-cert
+lucid_packages=dialog,apt,apt-utils,resolvconf,iproute,inetutils-ping,dnsutils,dhcp3-client,ssh,lsb-release,wget,gpgv,gnupg,sudo,ruby,rubygems1.8,ruby-dev,libopenssl-ruby,build-essential,ssl-cert
+natty_packages=dialog,apt,apt-utils,resolvconf,iproute,inetutils-ping,dnsutils,isc-dhcp-client,isc-dhcp-common,ssh,lsb-release,gnupg,netbase,lxcguest,sudo,ruby,rubygems1.8,ruby-dev,libruby,build-essential,wget,ssl-cert
 # check the mini ubuntu was not already downloaded
 rm -rf "$cache/$suite-$arch"
 mkdir -p "$cache/$suite-$arch"
