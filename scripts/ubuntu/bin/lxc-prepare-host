@@ -24,10 +24,28 @@ apt-get install -y lxc bridge-utils debootstrap dhcp3-server bind9 ntp
 # setup bridge and nat
 if [[ ! `ip link ls dev br0` ]]; then
 	brctl addbr br0
-	ifconfig br0 $gateway_ip netmask 255.255.255.0 up
+	ifconfig br0 $gateway_ip netmask $netmask up
 	iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 	sysctl -w net.ipv4.ip_forward=1
 fi
+
+if [[ ! `grep "auto br0" /etc/network/interfaces` ]]; then
+	cat <<EOF >> /etc/network/interfaces
+auto br0
+iface br0 inet static
+address $gateway_ip
+netmask $netmask
+bridge_stp off
+bridge_maxwait 5
+pre-up brctl addbr br0
+post-up /usr/sbin/brctl setfd br0 0
+EOF
+fi
+
+iptables-save > /etc/firewall.conf
+echo "#!/bin/sh" > /etc/network/if-up.d/iptables 
+echo "iptables-restore < /etc/firewall.conf" >> /etc/network/if-up.d/iptables 
+chmod +x /etc/network/if-up.d/iptables
 
 # setup cgroup
 if [[ ! -d /cgroup ]]; then
@@ -36,6 +54,12 @@ fi
 
 if [[ ! `mount | grep cgroup` ]]; then
 	mount none -t cgroup /cgroup
+fi
+
+if [[ ! `grep "/cgroup" /etc/fstab` ]]; then
+	cat <<EOF >> /etc/fstab
+none /cgroup cgroup defaults 0 0
+EOF
 fi
 
 # setup nameserver
