@@ -37,12 +37,14 @@ CQWv13UgQjiHgQILXSb7xdzpWK1wpDoqIEWQugRyPQDeZhPWVbB4Lg==
     
     include Observable
 
-    def initialize(hostname, ip, type)
+    def initialize(hostname, options)
+      options = {:ip => DYNAMIC_IP, :netmask => "24", :type => "natty"}.merge(options)
       @hostname = hostname
-      @ip = ip
+      @ip = options[:ip]
+      @netmask = options[:netmask]
       unless exists?
         conf_file = generate_lxc_config
-        system "lxc-create -n #{hostname} -f #{conf_file} -t #{type.to_s}" 
+        system "lxc-create -n #{hostname} -f #{conf_file} -t #{options[:type].to_s}" 
       end
       @chef_runner = Toft::Chef::ChefRunner.new("#{rootfs}") do |chef_command|
         run_ssh chef_command
@@ -78,7 +80,7 @@ CQWv13UgQjiHgQILXSb7xdzpWK1wpDoqIEWQugRyPQDeZhPWVbB4Lg==
     def run_ssh(command)
       raise ArgumentError, "Trying to run empty command on node #{@hostname}", caller if command.blank?
       error = false
-      Net::SSH.start(@ip, "root", :key_data => [PRIVATE_KEY]) do |ssh|
+      Net::SSH.start(@hostname, "root", :key_data => [PRIVATE_KEY]) do |ssh|
         ssh.exec! command do |ch, stream, data|
           if stream == :stderr
             error = true
@@ -123,19 +125,20 @@ CQWv13UgQjiHgQILXSb7xdzpWK1wpDoqIEWQugRyPQDeZhPWVbB4Lg==
         break if netstat =~ /ssh/
       end
       while true
-        break if Ping.pingecho @ip, 0.1
+        break if Ping.pingecho @hostname, 0.1
         sleep 0.5
       end
-      puts "SSH connection on #{@ip} is ready..."
+      puts "SSH connection on '#{@hostname}/#{@ip}' is ready..."
     end
 
     def generate_lxc_config
+      full_ip = @ip == Toft::DYNAMIC_IP ? "#{@ip}" : "#{@ip}/#{@netmask}"
       conf = <<-EOF
 lxc.network.type = veth
 lxc.network.flags = up
 lxc.network.link = br0
 lxc.network.name = eth0
-lxc.network.ipv4 = #{@ip}/24
+lxc.network.ipv4 = #{full_ip}
       EOF
       conf_file = "/tmp/#{@hostname}-conf"
       File.open(conf_file, 'w') do |f|

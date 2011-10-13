@@ -85,16 +85,36 @@ zone "$domain" in{
 };
 EOF
 
-if [[ ! `grep "named.conf.$domain" /etc/bind/named.conf` ]]; then
-	cat <<EOF >> /etc/bind/named.conf
+cat <<EOF > /etc/bind/named.conf.options.foo
+options {
+	directory "/var/cache/bind";
+	forwarders {
+		`grep nameserver /etc/resolv.conf | cut -d " " -f2 |  xargs -n 1 | awk '{ print $1";"$2 }'`
+	};
+	forward first;
+	auth-nxdomain no;    # conform to RFC1035
+	listen-on-v6 { any; };
+};
+EOF
+
+cat <<EOF > /etc/bind/named.conf
+include "/etc/bind/named.conf.options.foo";
+include "/etc/bind/named.conf.local";
+include "/etc/bind/named.conf.default-zones";
 include "/etc/bind/named.conf.$domain";
 EOF
-	
-fi
 
 sudo chmod 775 /etc/bind
 
 /etc/init.d/bind9 restart
+
+# let host use same nameserver with containers
+mv /etc/resolv.conf /etc/resolv.conf.old
+cat <<EOF > /etc/resolv.conf
+domain foo
+search foo
+nameserver 192.168.20.1
+EOF
 
 # setup dhcp server
 mv /etc/dhcp/dhcpd.conf /etc/dhcp/dhcpd.conf.old

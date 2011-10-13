@@ -1,6 +1,8 @@
+- support dynamical ip query
+- set timeout when waiting for ssh
 - (done)print ssh output as it go rather than at the end of the execution
-- allow vm network/ip configuration
-- dhcp
+- (done)allow vm network/ip configuration
+- (done)dhcp
 - add cnames for container
 - add hosts entry for containers
 - hook lxc containers with bigger network

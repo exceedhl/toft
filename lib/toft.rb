@@ -4,12 +4,14 @@ require 'toft/chef/chef_attributes'
 require 'toft/chef/chef_runner'
 
 module Toft
+  DYNAMIC_IP = "0.0.0.0"
+  
   class << self
     attr_accessor :cookbook_path, :role_path
   end
   
-  def create_node(hostname, ip, type)
-    NodeController.instance.create_node(hostname, ip, type)
+  def create_node(hostname, options = {})
+    NodeController.instance.create_node(hostname, options)
   end
   
   def find(hostname)

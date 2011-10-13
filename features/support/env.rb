@@ -7,7 +7,7 @@ CHEF_FIXTURE_PATH = File.dirname(__FILE__) + '/../../fixtures/chef'
 World(Toft)
 
 include Toft
-n1 = create_node "n1", "192.168.20.2", "natty"
+n1 = create_node "n1", {:ip => "192.168.20.2", :type => "natty"}
 
 Before do
   Toft.cookbook_path = CHEF_FIXTURE_PATH + '/cookbooks'

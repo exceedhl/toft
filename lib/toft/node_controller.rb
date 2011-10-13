@@ -8,8 +8,8 @@ module Toft
       @nodes = {}
     end
     
-    def create_node(hostname, ip, type)
-      node = Node.new(hostname, ip, type)
+    def create_node(hostname, options)
+      node = Node.new(hostname, options)
       node.add_observer self
       @nodes[hostname] = node
     end

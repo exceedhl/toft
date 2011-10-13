@@ -1,11 +1,15 @@
-Given /^I have a clean running node "([^"]*)" with ip "([^"]*)"$/ do |node, ip|
-  create_node node, ip, "natty"
+Given /^I have a clean running node n1$/ do
   @n1.start
   @n1.rm "/tmp/stub"
 end
 
 When /^I add another node "([^"]*)" with ip "([^"]*)"$/ do |node, ip|
-  create_node node, ip, "natty"
+  create_node node, {:ip => ip, :type => "natty"}
+end
+
+When /^I add another node "([^"]*)"$/ do |node|
+  n = create_node node
+  n.start
 end
 
 When /^I destroy node "([^"]*)"$/ do |node|
