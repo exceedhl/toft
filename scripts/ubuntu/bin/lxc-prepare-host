@@ -12,15 +12,6 @@ netmask="255.255.255.0"
 range="192.168.20.2 192.168.20.254"
 domain=foo
 
-# disable apparmor
-/etc/init.d/apparmor teardown
-/etc/init.d/apparmor stop
-update-rc.d -f apparmor remove
-aptitude remove apparmor apparmor-utils
-
-# install nameserver, dhcp server, ntp etc.
-apt-get install -y lxc bridge-utils debootstrap dhcp3-server bind9 ntp
-
 # setup bridge and nat
 if [[ ! `ip link ls dev br0` ]]; then
 	brctl addbr br0

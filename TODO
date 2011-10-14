@@ -1,14 +1,16 @@
-- create deb and rpm package for toft-lxc-utils
+- (done)create deb and rpm package for toft-lxc-utils
+- rename templates name in order not to conflict with lxc templates(then we can move the --replaces declaration)
 - refactoring scripts to reduce duplication, and embed image building in template
-- make preparation script idempotent
+- (done)make preparation script idempotent
 - support dynamical ip query
 - set timeout when waiting for ssh
 - add cnames for container
 - (done)print ssh output as it go rather than at the end of the execution
 - (done)allow vm network/ip configuration
 - (done)dhcp
-- vagrant will override resolv.conf after every restart
+- (issue)vagrant will override resolv.conf after every restart
 - add yum/apt source
+- chef client/server support
 - add hosts entry for containers
 - hook lxc containers with bigger network
 - initialize chef attributes in other way
