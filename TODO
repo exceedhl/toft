@@ -1,10 +1,13 @@
+- create deb and rpm package for toft-lxc-utils
+- refactoring scripts to reduce duplication, and embed image building in template
 - make preparation script idempotent
 - support dynamical ip query
 - set timeout when waiting for ssh
+- add cnames for container
 - (done)print ssh output as it go rather than at the end of the execution
 - (done)allow vm network/ip configuration
 - (done)dhcp
-- add cnames for container
+- vagrant will override resolv.conf after every restart
 - add yum/apt source
 - add hosts entry for containers
 - hook lxc containers with bigger network
@@ -31,14 +34,18 @@
 - logger level
 - extract out different modules
 
-toft init local .
+vagrant add box .....
+toft init local . 
 vagrant up
-toft image add centos-6-amd64 lucid-amd64
-toft cucumber ....
+toft -d local image add centos-6-amd64 lucid-amd64
 
 toft init remote root@xx.xx.xx.xx 
-toft image add centos-6-amd64 lucid-amd64
-toft cucumber ....
+toft -d remote image add http://centos-6-amd64.... http://lucid-amd64...
+toft -d remote exec cucumber  ...
+toft -d remote exec cucumber  ...
+toft -d remote exec rspec 
+
+toft -d remote lxc create n1
 
 bash < <(curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer )
 
