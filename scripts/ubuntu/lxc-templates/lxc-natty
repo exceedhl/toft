@@ -24,8 +24,25 @@ EOF
 		cat <<EOF > $rootfs/etc/rc.local
 #!/bin/bash
 
-ip=\`ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print \$1}'\`
-if [[ -n \$ip ]] ; then # if manually set ip address
+function get_ip {
+	\`ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print \$1}'\`
+}
+
+function update_ns {
+	ip=get_ip
+	# add default route to host and update ns
+	cat <<END > /tmp/nsupdate.txt
+server $gateway_ip
+update delete ${hostname}.$domain
+update add ${hostname}.$domain	86400 A \$ip
+send
+END
+
+	route add default gw $gateway_ip
+	nsupdate /tmp/nsupdate.txt
+}
+
+if [[ -n get_ip ]] ; then # if manually set ip address
 	# use host dns server
 	rm /etc/resolv.conf
 	cat <<END > /etc/resolv.conf
@@ -33,19 +50,11 @@ nameserver $gateway_ip
 domain $domain
 search $domain
 END
-		
-	# add default route to host and update ns
-	cat <<END > /tmp/nsupdate.txt
-server $gateway_ip
-update add ${hostname}.$domain	86400 A \$ip
-send
-END
-
-	route add default gw 192.168.20.1
-	nsupdate /tmp/nsupdate.txt
 else # if ip not set, use dhcp
 	/sbin/dhclient eth0
 fi
+
+update_ns
 exit 0
 EOF
 

@@ -80,7 +80,7 @@ CQWv13UgQjiHgQILXSb7xdzpWK1wpDoqIEWQugRyPQDeZhPWVbB4Lg==
     def run_ssh(command)
       raise ArgumentError, "Trying to run empty command on node #{@hostname}", caller if command.blank?
       error = false
-      Net::SSH.start(@hostname, "root", :key_data => [PRIVATE_KEY]) do |ssh|
+      Net::SSH.start(fqdn, "root", :key_data => [PRIVATE_KEY]) do |ssh|
         ssh.exec! command do |ch, stream, data|
           if stream == :stderr
             error = true
@@ -113,6 +113,10 @@ CQWv13UgQjiHgQILXSb7xdzpWK1wpDoqIEWQugRyPQDeZhPWVbB4Lg==
     def file(path)
       FileChecker.new(rootfs, path)
     end
+    
+    def ip
+      @ip == Toft::DYNAMIC_IP ? `dig +short #{fqdn}`.strip : @ip
+    end
 
     private
     def rootfs
@@ -125,7 +129,7 @@ CQWv13UgQjiHgQILXSb7xdzpWK1wpDoqIEWQugRyPQDeZhPWVbB4Lg==
         break if netstat =~ /ssh/
       end
       while true
-        break if Ping.pingecho @hostname, 0.1
+        break if Ping.pingecho fqdn, 0.1
         sleep 0.5
       end
       puts "SSH connection on '#{@hostname}/#{@ip}' is ready..."
@@ -145,6 +149,10 @@ lxc.network.ipv4 = #{full_ip}
         f.write(conf);
       end
       return conf_file
+    end
+    
+    def fqdn
+      "#{@hostname}.#{Toft::DOMAIN}"
     end
   end
 end

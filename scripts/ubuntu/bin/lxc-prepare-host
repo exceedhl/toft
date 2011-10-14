@@ -132,7 +132,7 @@ max-lease-time 7200;
 authoritative;
 log-facility local7;
 
-zone $domain {
+zone $domain. {
    primary localhost;
 }
 

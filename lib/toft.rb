@@ -5,6 +5,7 @@ require 'toft/chef/chef_runner'
 
 module Toft
   DYNAMIC_IP = "0.0.0.0"
+  DOMAIN = "foo"
   
   class << self
     attr_accessor :cookbook_path, :role_path

@@ -40,3 +40,8 @@ Then /^the node "([^"]*)" should be running$/ do |node|
   find(node).should be_running
 end
 
+Then /^Node "([^"]*)" should have ip address same with that obtained from inside it through ssh$/ do |node|
+  n = find(node)
+  n.get_ssh_result("ifconfig eth0 | grep 'inet addr:'").should include(n.ip)
+end
+
