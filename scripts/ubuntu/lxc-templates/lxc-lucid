@@ -18,16 +18,7 @@ configure_ubuntu()
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDCguB7XL3ARzLZYLsIMZe4UUO371m+H5C6V8MhtmSlgXtgHDo7eZhNSm5zCeoyGd32OKeLxuxCCEkXfDDF1aa2a6twcASE3pmWNdnBS7auiOH4P7g+eQ4Aw9v7DdESbIVgHF/NDiAEFFdmApYNM3oCX2FhEVNVKxkkIokUr4axYFJzmJ6Xoi5Sd8JtPC85FZVXqDucZDnHQlOcCkbSo0UOmsWQGwtu8eUHoDeUG0dB8ntb9xlBeLctdrAPhuFYCX8IfFkdcakkzv61ETPbKE6g9wdTDC/TEep7/AHGYmarziRnwKiVOL1jnE1coOJLqy8wOC3dKGmRZy9D4sTc+FRV root insecure public key
 	EOF
 
-	# copy host resolve 
-    rm $rootfs/etc/resolv.conf
-    cp /etc/resolv.conf $rootfs/etc/resolv.conf
-
-	# add default route to host
-	cat <<EOF > $rootfs/etc/rc.local
-#!/bin/sh -e
-route add default gw 192.168.20.1
-exit 0
-EOF
+	cp /usr/lib/lxc/templates/files/rc.local $rootfs/etc/rc.local
 
     # disable selinux in ubuntu
     mkdir -p $rootfs/selinux

@@ -3,11 +3,12 @@ require 'rspec/expectations'
 require 'toft'
 
 CHEF_FIXTURE_PATH = File.dirname(__FILE__) + '/../../fixtures/chef'
+CONTAINER_TYPE = "lucid"
 
 World(Toft)
 
 include Toft
-n1 = create_node "n1", {:ip => "192.168.20.2", :type => "natty"}
+n1 = create_node "n1", {:ip => "192.168.20.2", :type => CONTAINER_TYPE}
 
 Before do
   Toft.cookbook_path = CHEF_FIXTURE_PATH + '/cookbooks'

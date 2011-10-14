@@ -4,11 +4,11 @@ Given /^I have a clean running node n1$/ do
 end
 
 When /^I add another node "([^"]*)" with ip "([^"]*)"$/ do |node, ip|
-  create_node node, {:ip => ip, :type => "natty"}
+  create_node node, {:ip => ip, :type => CONTAINER_TYPE}
 end
 
 When /^I add another node "([^"]*)"$/ do |node|
-  n = create_node node
+  n = create_node node, {:type => CONTAINER_TYPE}
   n.start
 end
 
