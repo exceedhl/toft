@@ -7,6 +7,15 @@ Scenario: Start or stop node
 	Then the node "n1" should be stopped
 	When I start node "n1"
 	Then the node "n1" should be running
+	
+Scenario: Add and remove cnames for a node
+	Given I have a clean running node n1
+	And I add another node "n2"
+	When I add cname "cn1" to "n1"
+	Then Running ssh command "ping -c 1 cn1" on "n2" should succeed	
+	When I remove cname "cn1" from "n1"
+	Then Running ssh command "ping -c 1 cn1" on "n2" should fail
+	And Node "n2" is destroyed
 
 Scenario: Create node only by name and fetch their info
 	Given I have a clean running node n1

@@ -45,3 +45,10 @@ Then /^Node "([^"]*)" should have ip address same with that obtained from inside
   n.get_ssh_result("ifconfig eth0 | grep 'inet addr:'").should include(n.ip)
 end
 
+When /^I add cname "([^"]*)" to "([^"]*)"$/ do |cname, node|
+  find(node).add_cname cname
+end
+
+When /^I remove cname "([^"]*)" from "([^"]*)"$/ do |cname, node|
+  find(node).remove_cname cname
+end

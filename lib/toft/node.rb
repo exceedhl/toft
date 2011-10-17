@@ -35,6 +35,9 @@ CQWv13UgQjiHgQILXSb7xdzpWK1wpDoqIEWQugRyPQDeZhPWVbB4Lg==
 -----END RSA PRIVATE KEY-----    
     EOF
     
+    TIMOUT_IN_SECONDS = 60
+    TRY_INTERVAL = 0.5
+    
     include Observable
 
     def initialize(hostname, options)
@@ -75,6 +78,14 @@ CQWv13UgQjiHgQILXSb7xdzpWK1wpDoqIEWQugRyPQDeZhPWVbB4Lg==
 
     def running?
       `lxc-info -n #{@hostname}` =~ /RUNNING/
+    end
+    
+    def add_cname(cname)
+      run_ssh "echo -e 'update add #{cname}.#{Toft::DOMAIN} 86400 CNAME #{@hostname}.#{Toft::DOMAIN}\\nsend' | nsupdate"
+    end
+    
+    def remove_cname(cname)
+      run_ssh "echo -e 'update delete #{cname}.#{Toft::DOMAIN}\\nsend' | nsupdate"      
     end
 
     def run_ssh(command)
@@ -122,16 +133,32 @@ CQWv13UgQjiHgQILXSb7xdzpWK1wpDoqIEWQugRyPQDeZhPWVbB4Lg==
     def rootfs
       "/var/lib/lxc/#{@hostname}/rootfs"
     end
-
-    def wait_ssh_ready
+    
+    def wait_sshd_running
       while true
         netstat = `lxc-netstat --name #{@hostname} -ta`        
-        break if netstat =~ /ssh/
+        return if netstat =~ /ssh/
       end
-      while true
-        break if Ping.pingecho fqdn, 0.1
-        sleep 0.5
+    end
+    
+    def wait_remote_host_reachable
+      max_try = TIMOUT_IN_SECONDS / TRY_INTERVAL
+      try = 0
+      while try < max_try
+        begin
+          break if Ping.pingecho fqdn, 0.1
+        rescue Exception
+          # fix the strange pingcho exception
+        end
+        sleep TRY_INTERVAL
+        try += 1
       end
+      raise RuntimeError, "Remote machine not responding." if try >= max_try
+    end
+
+    def wait_ssh_ready
+      wait_sshd_running
+      wait_remote_host_reachable
       puts "SSH connection on '#{@hostname}/#{@ip}' is ready..."
     end
 
