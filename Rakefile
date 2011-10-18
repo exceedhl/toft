@@ -17,6 +17,7 @@ task :package_deb do
   content_dir = "#{PROJECT_ROOT}/pkg/#{LXC_PACKAGE_NAME}"
   mkdir_p content_dir
   mkdir_p "#{content_dir}/usr/local/bin"
+  mkdir_p "#{content_dir}/var/cache/lxc"
   mkdir_p "#{content_dir}/usr/lib/lxc/templates"
   cp_r Dir.glob("#{src_dir}/bin/share/*"), "#{content_dir}/usr/local/bin"
   cp_r Dir.glob("#{src_dir}/bin/ubuntu/*"), "#{content_dir}/usr/local/bin"
@@ -60,6 +61,8 @@ task :package_rpm do
   content_dir = "#{PROJECT_ROOT}/pkg/#{LXC_PACKAGE_NAME}"
   mkdir_p content_dir
   mkdir_p "#{content_dir}/usr/local/bin"
+  mkdir_p "#{content_dir}/usr/var/lib/lxc"
+  mkdir_p "#{content_dir}/var/cache/lxc"
   mkdir_p "#{content_dir}/usr/lib/lxc/templates"
   cp_r Dir.glob("#{src_dir}/bin/share/*"), "#{content_dir}/usr/local/bin"
   cp_r Dir.glob("#{src_dir}/bin/centos/*"), "#{content_dir}/usr/local/bin"

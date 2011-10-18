@@ -132,6 +132,9 @@ EOF
 # disable selinux to make it happy for bind to creating jnl file
 echo 0 >/selinux/enforce
 
+# fix the dir owner to grant bind to generate jnl 
+chown named:named /var/named
+
 service named restart
 
 # add our nameserver into /etc/resolv.conf
