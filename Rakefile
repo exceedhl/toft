@@ -10,20 +10,21 @@ task :clean do
 end
 
 desc "build gem and scripts package"
-task :package => [:build, :package_scripts]
+task :package => [:build, :package_deb, :package_rpm]
 
-task :package_scripts do
-  src_dir = "#{PROJECT_ROOT}/scripts/ubuntu"
+task :package_deb do
+  src_dir = "#{PROJECT_ROOT}/scripts"
   content_dir = "#{PROJECT_ROOT}/pkg/#{LXC_PACKAGE_NAME}"
   mkdir_p content_dir
   mkdir_p "#{content_dir}/usr/local/bin"
   mkdir_p "#{content_dir}/usr/lib/lxc/templates"
-  cp_r Dir.glob("#{src_dir}/bin/*"), "#{content_dir}/usr/local/bin"
+  cp_r Dir.glob("#{src_dir}/bin/share/*"), "#{content_dir}/usr/local/bin"
+  cp_r Dir.glob("#{src_dir}/bin/ubuntu/*"), "#{content_dir}/usr/local/bin"
   cp_r Dir.glob("#{src_dir}/lxc-templates/*"), "#{content_dir}/usr/lib/lxc/templates"
   
   post_install_script = <<-eos
 #!/bin/sh -e
-lxc-prepare-host
+/usr/local/bin/lxc-prepare-host
 eos
   File.open("#{PROJECT_ROOT}/pkg/toft-lxc-post-install.sh", 'w') { |f| f.write(post_install_script) }
   
@@ -37,6 +38,7 @@ eos
     -v #{Toft::VERSION} \
     -m "Huang Liang<exceedhl@gmail.com>" \
     --description "lxc templates and helper provided by toft" \
+    -d rpm \
     -d dnsutils \
     -d lxc \
     -d bridge-utils \
@@ -47,6 +49,44 @@ eos
     --replaces lxc \
     --conflicts apparmor \
     --conflicts apparmor-utils \
+    --post-install "#{PROJECT_ROOT}/pkg/toft-lxc-post-install.sh" \
+    .
+    EOF
+  end
+end
+
+task :package_rpm do
+  src_dir = "#{PROJECT_ROOT}/scripts"
+  content_dir = "#{PROJECT_ROOT}/pkg/#{LXC_PACKAGE_NAME}"
+  mkdir_p content_dir
+  mkdir_p "#{content_dir}/usr/local/bin"
+  mkdir_p "#{content_dir}/usr/lib/lxc/templates"
+  cp_r Dir.glob("#{src_dir}/bin/share/*"), "#{content_dir}/usr/local/bin"
+  cp_r Dir.glob("#{src_dir}/bin/centos/*"), "#{content_dir}/usr/local/bin"
+  cp_r Dir.glob("#{src_dir}/lxc-templates/*"), "#{content_dir}/usr/lib/lxc/templates"
+  
+  post_install_script = <<-eos
+#!/bin/sh -e
+/usr/local/bin/lxc-prepare-host
+eos
+  File.open("#{PROJECT_ROOT}/pkg/toft-lxc-post-install.sh", 'w') { |f| f.write(post_install_script) }
+  
+  Dir.chdir("pkg") do
+    system <<-EOF
+    fpm -s dir \
+    -t rpm \
+    -C #{content_dir} \
+    -a all \
+    -n #{LXC_PACKAGE_NAME} \
+    -v #{Toft::VERSION} \
+    -m "Huang Liang<exceedhl@gmail.com>" \
+    --description "lxc templates and helper provided by toft" \
+    -d bind-utils \
+    -d bridge-utils \
+    -d dhcp \
+    -d bind \
+    -d ntp \
+    -d libcap-devel \
     --post-install "#{PROJECT_ROOT}/pkg/toft-lxc-post-install.sh" \
     .
     EOF

@@ -38,9 +38,6 @@ if [[ ! `type rinse` ]]; then
 	make install)
 fi
 
-# install rpm
-apt-get install -y rpm
-
 # create centos image using rinse
 cat <<EOF > /tmp/after_post_install
 chroot $cache/$suite-$arch rpm -Uvh http://rbel.co/rbel6
