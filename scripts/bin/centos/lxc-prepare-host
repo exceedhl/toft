@@ -74,7 +74,7 @@ EOF
 fi
 
 # setup nameserver
-cat <<EOF > /var/named/name.foo
+cat <<EOF > /var/named/named.foo
 \$ORIGIN $domain.
 \$TTL 7200	; 2 hours
 @				IN SOA	ns1.$domain. hostmaster.$domain. (
@@ -133,6 +133,15 @@ EOF
 echo 0 >/selinux/enforce
 
 service named restart
+
+# add our nameserver into /etc/resolv.conf
+if [[ ! `grep "nameserver $gateway_ip" /etc/resolv.conf` ]]; then
+	cp /etc/resolv.conf /etc/resolv.conf.old
+	cat <<EOF > /etc/resolv.conf
+nameserver $gateway_ip
+`cat /etc/resolv.conf`
+EOF
+fi
 
 # setup dhcp3 server
 cat <<EOF > /etc/dhcp/dhcpd.conf
