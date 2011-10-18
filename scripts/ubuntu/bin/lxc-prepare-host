@@ -6,6 +6,20 @@ if [ ! "$username" = "root" ]; then
 	exit 1
 fi
 
+OS=`cat /etc/issue | cut -f 1 -d " " -s`
+
+# intsall lxc
+if [[ ! -f /usr/bin/lxc-ls ]]; then
+	(cd /tmp && \
+	wget http://lxc.sourceforge.net/download/lxc/lxc-0.7.4.tar.gz && \
+	tar zxf lxc-0.7.4.tar.gz && \
+	cd lxc-0.7.4 && \
+	./configure --prefix=/usr && \
+	make && \
+	make install)
+fi
+
+
 gateway_ip="192.168.20.1"
 subnet="192.168.20.0"
 netmask="255.255.255.0"
@@ -95,6 +109,40 @@ options {
 };
 EOF
 
+# debian bind9 package does not have this default-zones file
+# add this file to make it consistent between debian and ubuntu
+cat <<EOF > /etc/bind/named.conf.default-zones
+// prime the server with knowledge of the root servers
+zone "." {
+	type hint;
+	file "/etc/bind/db.root";
+};
+
+// be authoritative for the localhost forward and reverse zones, and for
+// broadcast zones as per RFC 1912
+
+zone "localhost" {
+	type master;
+	file "/etc/bind/db.local";
+};
+
+zone "127.in-addr.arpa" {
+	type master;
+	file "/etc/bind/db.127";
+};
+
+zone "0.in-addr.arpa" {
+	type master;
+	file "/etc/bind/db.0";
+};
+
+zone "255.in-addr.arpa" {
+	type master;
+	file "/etc/bind/db.255";
+};
+EOF
+
+mv /etc/bind/named.conf /etc/bind/named.conf.old
 cat <<EOF > /etc/bind/named.conf
 include "/etc/bind/named.conf.options.foo";
 include "/etc/bind/named.conf.local";
@@ -116,8 +164,16 @@ EOF
 fi
 
 # setup dhcp server
-mv /etc/dhcp/dhcpd.conf /etc/dhcp/dhcpd.conf.old
-cat <<EOF > /etc/dhcp/dhcpd.conf
+if [[ $OS = "Ubuntu" ]]; then
+	dhcp_conf_dir=dhcp
+	dhcp_daemon=isc-dhcp-server
+else
+	dhcp_conf_dir=dhcp3
+	dhcp_daemon=dhcp3-server
+fi
+
+mv /etc/$dhcp_conf_dir/dhcpd.conf /etc/$dhcp_conf_dir/dhcpd.conf.old
+cat <<EOF > /etc/$dhcp_conf_dir/dhcpd.conf
 ddns-updates on;
 ddns-update-style interim;
 
@@ -141,5 +197,5 @@ subnet $subnet netmask $netmask {
    option routers $gateway_ip;
 }
 EOF
-sudo /etc/init.d/isc-dhcp-server restart
+sudo /etc/init.d/$dhcp_daemon restart
 
