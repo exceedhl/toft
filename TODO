@@ -1,14 +1,16 @@
+- find all nodes
+- add timeout for lxc-netstat wait
 - (done)create deb and rpm package for toft-lxc-utils
-- rename templates name in order not to conflict with lxc templates(then we can move the --replaces declaration)
 - refactoring scripts to reduce duplication, and embed image building in template
 - (done)make preparation script idempotent
-- support dynamical ip query
-- set timeout when waiting for ssh
-- add cnames for container
+- (done)support dynamical ip query
+- (done)set timeout when waiting for ssh
+- (done)add cnames for container
 - (done)print ssh output as it go rather than at the end of the execution
 - (done)allow vm network/ip configuration
 - (done)dhcp
 - (issue)vagrant will override resolv.conf after every restart
+- rename templates name in order not to conflict with lxc templates(then we can move the --replaces declaration)
 - add yum/apt source
 - chef client/server support
 - add hosts entry for containers
