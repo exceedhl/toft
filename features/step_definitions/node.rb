@@ -21,7 +21,7 @@ When /^Node "([^"]*)" is destroyed$/ do |node|
 end
 
 Then /^There should be ([^"]*) nodes in the environment$/ do |count|
-  node_count.should == count.to_i
+  all_nodes.size.should == count.to_i
 end
 
 Then /^the node "([^"]*)" should be stopped$/ do |node|
@@ -51,4 +51,8 @@ end
 
 When /^I remove cname "([^"]*)" from "([^"]*)"$/ do |cname, node|
   find(node).remove_cname cname
+end
+
+Then /^Hostname of Node "([^"]*)" should match its name$/ do |node|
+  find(node).hostname.should == node
 end

@@ -23,8 +23,8 @@ module Toft
     NodeController.instance.destroy_node(hostname)
   end
   
-  def node_count
-    NodeController.instance.nodes.size
+  def all_nodes
+    NodeController.instance.nodes
   end
 end
 

@@ -24,6 +24,7 @@ Scenario: Create node only by name and fetch their info
 	And Running ssh command "ping -c 1 n3" on "n1" should succeed
 	And Node "n1" should have ip address same with that obtained from inside it through ssh
 	And Node "n3" should have ip address same with that obtained from inside it through ssh
+	And Hostname of Node "n1" should match its name
 	And Node "n3" is destroyed
 	
 Scenario: Create or destroy node 
