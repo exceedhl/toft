@@ -1,7 +1,17 @@
+h2. What is Toft
+
+Toft provides deb and rpm packages to simplify the usage of lxc; it also provides pre-created linux images(lucid, natty and centos-6) and scripts to create these images so user can play with lxc containers by simply installing a package and download an images file. 
+
+Toft also provides a ruby gem, wrapping common tasks such as managing nodes, running chef recipes, running ssh commands and verifying system status in ruby API; therefore you can use it with test framework such as rspec, cucumber to write tests against chef receipes, packages, scripts.
+
+h2. Motivation
+
 Infrastructure code development is not easy. You make some changes on your chef or shell scripts and wait an amount of time to check the results manually. As a developer I want to easily run the scripts I just wrote on a clean environment and check whether some file or directories exist, whether a package is installed, whether a service is started etc., and I want it fast. Also the whole process should be recorded in automatic tests so that I do not have to manually repeat the whole process everytime, and with these tests I do not have to worry that in the future I or other people will not ruin something working.
 
 While vagrant and cloud service provier such as Amazon already enable us to create and destroy arbitrary environment as we need, the creation and provisioning of those VM nodes tend to be slow. "LXC":http://lxc.sourceforge.net/ provides us one more choice. It takes less time to create and still provides a complete VM environment like vagrant or Amazon provide us. 
 
 Toft allows you to manage(create, destroy, configure, check...) a lxc node(or container as they called it) and test your infrastructure code in it. Creating a new lxc node take no more than 10 seconds(depends on your machine power) and most of the time is spent on copy rootfs files. Toft provides api to allow you run chef recipes, ssh commands on the node and assort of checkers to help you check the node status, relieving you from manual result verfication.
 
-Check this quick "tutorial":https://github.com/exceedhl/toft/wiki/Tutorial to see how to use toft and cucumber to BDD your infrastructure code.
+h2. How to use it
+
+Check this quick "tutorial":https://github.com/exceedhl/toft/wiki/How-to-use-toft-gem-and-cucumber-to-test-chef-cookbooks to see how to use toft and cucumber to BDD your infrastructure code.
