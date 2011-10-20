@@ -1,5 +1,5 @@
 Then /^Running ssh command "([^"]*)" on "([^"]*)" should succeed$/ do |cmd, node|
-  find(node).run_ssh(cmd).should be_true
+  lambda { find(node).run_ssh(cmd) }.should_not raise_error  
 end
 
 Then /^Running ssh command "([^"]*)" on "([^"]*)" should fail$/ do |cmd, node|

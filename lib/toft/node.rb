@@ -92,7 +92,7 @@ CQWv13UgQjiHgQILXSb7xdzpWK1wpDoqIEWQugRyPQDeZhPWVbB4Lg==
       raise ArgumentError, "Trying to run empty command on node #{@hostname}", caller if command.blank?
       stdout = ""
       stderr = ""
-      Net::SSH.start(fqdn, "root", :key_data => [PRIVATE_KEY]) do |ssh|
+      Net::SSH.start(fqdn, "root", :key_data => [PRIVATE_KEY], :paranoid => false) do |ssh|
         ssh.open_channel do |channel|
           channel.exec(command) do |ch, success|
             raise RuntimeError, "Could not execute command: [#{command}]", caller unless success
