@@ -40,7 +40,7 @@ CQWv13UgQjiHgQILXSb7xdzpWK1wpDoqIEWQugRyPQDeZhPWVbB4Lg==
     
     include Observable
 
-    def initialize(hostname, options)
+    def initialize(hostname, options = {})
       options = {:ip => DYNAMIC_IP, :netmask => "24", :type => "natty"}.merge(options)
       @hostname = hostname
       @ip = options[:ip]
@@ -53,7 +53,11 @@ CQWv13UgQjiHgQILXSb7xdzpWK1wpDoqIEWQugRyPQDeZhPWVbB4Lg==
         run_ssh chef_command
       end
     end
-
+    
+    def hostname
+      return @hostname
+    end
+    
     def exists?
       `lxc-ls` =~ /#{@hostname}/
     end
