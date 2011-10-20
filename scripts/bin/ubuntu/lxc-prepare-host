@@ -36,6 +36,8 @@ post-up /usr/sbin/brctl setfd br0 0
 EOF
 fi
 
+sudo sed -i "s/#*[ ^I]*net\.ipv4\.ip_forward[ ^I]*=[ ^I]*[01]/net\.ipv4\.ip_forward = 1/" /etc/sysctl.conf
+
 iptables-save > /etc/firewall.conf
 echo "#!/bin/sh" > /etc/network/if-up.d/iptables 
 echo "iptables-restore < /etc/firewall.conf" >> /etc/network/if-up.d/iptables 

@@ -16,16 +16,16 @@ task :package_deb do
   src_dir = "#{PROJECT_ROOT}/scripts"
   content_dir = "#{PROJECT_ROOT}/pkg/#{LXC_PACKAGE_NAME}"
   mkdir_p content_dir
-  mkdir_p "#{content_dir}/usr/local/bin"
+  mkdir_p "#{content_dir}/usr/bin"
   mkdir_p "#{content_dir}/var/cache/lxc"
   mkdir_p "#{content_dir}/usr/lib/lxc/templates"
-  cp_r Dir.glob("#{src_dir}/bin/share/*"), "#{content_dir}/usr/local/bin"
-  cp_r Dir.glob("#{src_dir}/bin/ubuntu/*"), "#{content_dir}/usr/local/bin"
+  cp_r Dir.glob("#{src_dir}/bin/share/*"), "#{content_dir}/usr/bin"
+  cp_r Dir.glob("#{src_dir}/bin/ubuntu/*"), "#{content_dir}/usr/bin"
   cp_r Dir.glob("#{src_dir}/lxc-templates/*"), "#{content_dir}/usr/lib/lxc/templates"
   
   post_install_script = <<-eos
 #!/bin/sh -e
-/usr/local/bin/lxc-prepare-host
+/usr/bin/lxc-prepare-host
 eos
   File.open("#{PROJECT_ROOT}/pkg/toft-lxc-post-install.sh", 'w') { |f| f.write(post_install_script) }
   
@@ -60,17 +60,17 @@ task :package_rpm do
   src_dir = "#{PROJECT_ROOT}/scripts"
   content_dir = "#{PROJECT_ROOT}/pkg/#{LXC_PACKAGE_NAME}"
   mkdir_p content_dir
-  mkdir_p "#{content_dir}/usr/local/bin"
+  mkdir_p "#{content_dir}/usr/bin"
   mkdir_p "#{content_dir}/var/lib/lxc"
   mkdir_p "#{content_dir}/var/cache/lxc"
   mkdir_p "#{content_dir}/usr/lib/lxc/templates"
-  cp_r Dir.glob("#{src_dir}/bin/share/*"), "#{content_dir}/usr/local/bin"
-  cp_r Dir.glob("#{src_dir}/bin/centos/*"), "#{content_dir}/usr/local/bin"
+  cp_r Dir.glob("#{src_dir}/bin/share/*"), "#{content_dir}/usr/bin"
+  cp_r Dir.glob("#{src_dir}/bin/centos/*"), "#{content_dir}/usr/bin"
   cp_r Dir.glob("#{src_dir}/lxc-templates/*"), "#{content_dir}/usr/lib/lxc/templates"
   
   post_install_script = <<-eos
 #!/bin/sh -e
-/usr/local/bin/lxc-prepare-host
+/usr/bin/lxc-prepare-host
 eos
   File.open("#{PROJECT_ROOT}/pkg/toft-lxc-post-install.sh", 'w') { |f| f.write(post_install_script) }
   

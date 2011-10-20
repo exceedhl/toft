@@ -42,7 +42,7 @@ end
 
 Then /^Node "([^"]*)" should have ip address same with that obtained from inside it through ssh$/ do |node|
   n = find(node)
-  n.get_ssh_result("ifconfig eth0 | grep 'inet addr:'").should include(n.ip)
+  n.run_ssh("ifconfig eth0 | grep 'inet addr:'").stdout.should include(n.ip)
 end
 
 When /^I add cname "([^"]*)" to "([^"]*)"$/ do |cname, node|

@@ -38,13 +38,13 @@ BOOTPROTO=static
 DELAY=0
 TYPE=Bridge
 IPADDR=$gateway_ip
-NETWORK=$subnet
 NETMASK=$netmask
-GATEWAY=$gateway_ip
 MTU=1500
 IPV6INIT=no
 USERCTL=no
 EOF
+
+sudo sed -i "s/#*[ ^I]*net\.ipv4\.ip_forward[ ^I]*=[ ^I]*[01]/net\.ipv4\.ip_forward = 1/" /etc/sysctl.conf
 
 # reset iptables
 cat <<EOF > /etc/sysconfig/iptables

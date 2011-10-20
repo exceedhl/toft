@@ -90,28 +90,36 @@ CQWv13UgQjiHgQILXSb7xdzpWK1wpDoqIEWQugRyPQDeZhPWVbB4Lg==
 
     def run_ssh(command)
       raise ArgumentError, "Trying to run empty command on node #{@hostname}", caller if command.blank?
-      error = false
+      stdout = ""
+      stderr = ""
       Net::SSH.start(fqdn, "root", :key_data => [PRIVATE_KEY]) do |ssh|
-        ssh.exec! command do |ch, stream, data|
-          if stream == :stderr
-            error = true
+        ssh.open_channel do |channel|
+          channel.exec(command) do |ch, success|
+            raise RuntimeError, "Could not execute command: [#{command}]", caller unless success
+
+            channel.on_data do |c, data|
+              puts data
+              stdout << data
+              yield data if block_given?
+            end
+            channel.on_extended_data do |c, type, data|
+              puts data
+              stderr << data
+              yield data if block_given?
+            end
+            channel.on_request("exit-status") do |c, data|
+              exit_code = data.read_long
+              raise CommandExecutionError.new "Remote command [#{command}] exited with status #{exit_code}", stdout, stderr unless exit_code.zero?
+            end
+            channel.on_request("exit-signal") do |c, data|
+              raise CommandExecutionError.new "Remote command [#{command}] terminated with signal", stdout, stderr
+            end
           end
-          yield data if block_given?
-	        puts data
-        end
+        end.wait
       end
-      raise RuntimeError, "Error happened while executing command [#{command}]!", caller if error
-      return true
+      return CommandResult.new stdout, stderr
     end
     
-    def get_ssh_result(cmd)
-      output = ""
-      run_ssh(cmd) do |data|
-        output += data
-      end
-      return output
-    end
-
     def rm(dir)
       raise ArgumentError, "Illegal dir path: [#{dir}]", caller if dir.blank? || dir[0] != ?/
       system "rm -rf #{rootfs}#{dir}"
@@ -180,6 +188,25 @@ lxc.network.ipv4 = #{full_ip}
     
     def fqdn
       "#{@hostname}.#{Toft::DOMAIN}"
+    end
+  end
+  
+  class CommandResult
+    attr_reader :stdout, :stderr
+    
+    def initialize(stdout, stderr)
+      @stdout = stdout
+      @stderr = stderr
+    end
+  end
+
+  class CommandExecutionError < RuntimeError
+    attr_reader :message, :stdout, :stderr
+    
+    def initialize(message, stdout, stderr)
+      @message = message
+      @stdout = stdout
+      @stderr = stderr
     end
   end
 end

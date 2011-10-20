@@ -16,5 +16,5 @@ Scenario: Test rm
 Scenario: Check ssh command result
 	Given I have a clean running node n1
 	Then the result of running ssh command "ps" on "n1" should contain "sshd"
-	Then the result of running ssh command "chef-solo" on "n1" should contain "No cookbook found"
+	Then the result of running ssh command "chef-solo" on "n1" should fail because of "No cookbook found"
 	

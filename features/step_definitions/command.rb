@@ -15,5 +15,14 @@ Then /^Rm "([^"]*)" on "([^"]*)" should succeed$/ do |dir, node|
 end
 
 Then /^the result of running ssh command "([^"]*)" on "([^"]*)" should contain "([^"]*)"$/ do |cmd, node, s|
-  find(node).get_ssh_result(cmd).should include(s)
+  r = find(node).run_ssh(cmd)
+  r.stdout.should include(s)
+end
+
+Then /^the result of running ssh command "([^"]*)" on "([^"]*)" should fail because of "([^"]*)"$/ do |cmd, node, s|
+  begin
+    r = find(node).run_ssh(cmd)
+  rescue CommandExecutionError => e
+    e.stdout.should include(s)
+  end
 end

@@ -18,5 +18,5 @@ Before do
 end
 
 at_exit do
-  n1.destroy
+  # n1.destroy
 end
