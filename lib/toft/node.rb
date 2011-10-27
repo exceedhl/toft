@@ -2,6 +2,7 @@ require 'observer'
 require 'net/ssh'
 require 'ping'
 require 'toft/file_checker'
+require 'toft/command_executor'
 
 module Toft
   class Node
@@ -39,6 +40,7 @@ CQWv13UgQjiHgQILXSb7xdzpWK1wpDoqIEWQugRyPQDeZhPWVbB4Lg==
     TRY_INTERVAL = 0.5
     
     include Observable
+    include Toft::CommandExecutor
 
     def initialize(hostname, options = {})
       options = {:ip => DYNAMIC_IP, :netmask => "24", :type => "natty"}.merge(options)
@@ -47,7 +49,7 @@ CQWv13UgQjiHgQILXSb7xdzpWK1wpDoqIEWQugRyPQDeZhPWVbB4Lg==
       @netmask = options[:netmask]
       unless exists?
         conf_file = generate_lxc_config
-        system "lxc-create -n #{hostname} -f #{conf_file} -t #{options[:type].to_s}" 
+        cmd! "lxc-create -n #{hostname} -f #{conf_file} -t #{options[:type].to_s}" 
       end
       @chef_runner = Toft::Chef::ChefRunner.new("#{rootfs}") do |chef_command|
         run_ssh chef_command
@@ -59,29 +61,29 @@ CQWv13UgQjiHgQILXSb7xdzpWK1wpDoqIEWQugRyPQDeZhPWVbB4Lg==
     end
     
     def exists?
-      `lxc-ls` =~ /#{@hostname}/
+      cmd("lxc-ls") =~ /#{@hostname}/
     end
 
     def start
-      `lxc-start -n #{@hostname} -d`
-      `lxc-wait -n #{@hostname} -s RUNNING`
+      cmd! "lxc-start -n #{@hostname} -d"
+      cmd! "lxc-wait -n #{@hostname} -s RUNNING"
       wait_ssh_ready
     end
 
     def stop
-      `lxc-stop -n #{@hostname}`
-      `lxc-wait -n #{@hostname} -s STOPPED`
+      cmd! "lxc-stop -n #{@hostname}"
+      cmd! "lxc-wait -n #{@hostname} -s STOPPED"
     end
 
     def destroy
       stop
-      `lxc-destroy -n #{@hostname}`
+      cmd! "lxc-destroy -n #{@hostname}"
       changed
       notify_observers(@hostname)
     end
 
     def running?
-      `lxc-info -n #{@hostname}` =~ /RUNNING/
+      cmd("lxc-info -n #{@hostname}") =~ /RUNNING/
     end
     
     def add_cname(cname)
@@ -126,7 +128,7 @@ CQWv13UgQjiHgQILXSb7xdzpWK1wpDoqIEWQugRyPQDeZhPWVbB4Lg==
     
     def rm(dir)
       raise ArgumentError, "Illegal dir path: [#{dir}]", caller if dir.blank? || dir[0] != ?/
-      system "rm -rf #{rootfs}#{dir}"
+      cmd! "rm -rf #{rootfs}#{dir}"
     end
 
     def run_chef(run_list, params = {})
@@ -148,7 +150,7 @@ CQWv13UgQjiHgQILXSb7xdzpWK1wpDoqIEWQugRyPQDeZhPWVbB4Lg==
     
     def wait_sshd_running
       while true
-        netstat = `lxc-netstat --name #{@hostname} -ta`        
+        netstat = cmd("lxc-netstat --name #{@hostname} -ta")        
         return if netstat =~ /ssh/
       end
     end

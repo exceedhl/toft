@@ -1,5 +1,10 @@
+require 'toft/command_executor'
+
 module Toft
   class FileChecker
+    
+    include Toft::CommandExecutor
+    
     def initialize(rootfs, path)
       @rootfs = rootfs
       @path = path
@@ -31,11 +36,11 @@ module Toft
     
     private 
     def stat(format)
-      `chroot #{@rootfs} stat -c #{format} #{@path}`.rstrip      
+      cmd("chroot #{@rootfs} stat -c #{format} #{@path}").rstrip      
     end
     
     def test(op)
-      system("chroot #{@rootfs} test #{op} #{@path}")
+      cmd!("chroot #{@rootfs} test #{op} #{@path}")
       $? == 0 ? true : false
     end
   end
