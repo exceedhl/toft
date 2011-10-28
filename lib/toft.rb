@@ -15,16 +15,13 @@ module Toft
     NodeController.instance.create_node(hostname, options)
   end
   
-  def find(hostname)
-    NodeController.instance.nodes[hostname]
+  def find(name)
+    return NodeController.instance.nodes if name === :all
+    NodeController.instance.nodes[name] if name.is_a? String
   end
   
   def destroy_node(hostname)
     NodeController.instance.destroy_node(hostname)
-  end
-  
-  def all_nodes
-    NodeController.instance.nodes
   end
 end
 

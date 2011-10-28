@@ -21,7 +21,7 @@ When /^Node "([^"]*)" is destroyed$/ do |node|
 end
 
 Then /^There should be ([^"]*) nodes in the environment$/ do |count|
-  all_nodes.size.should == count.to_i
+  find(:all).size.should == count.to_i
 end
 
 Then /^the node "([^"]*)" should be stopped$/ do |node|
