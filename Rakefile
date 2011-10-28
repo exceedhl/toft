@@ -39,6 +39,7 @@ eos
     -v #{Toft::VERSION} \
     -m "Huang Liang<exceedhl@gmail.com>" \
     --description "lxc templates and helper provided by toft" \
+    -d sudo \
     -d rpm \
     -d dnsutils \
     -d lxc \
@@ -84,6 +85,7 @@ eos
     -v #{Toft::VERSION} \
     -m "Huang Liang<exceedhl@gmail.com>" \
     --description "lxc templates and helper provided by toft" \
+    -d sudo \
     -d bind-utils \
     -d bridge-utils \
     -d dhcp \
