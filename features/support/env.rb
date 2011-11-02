@@ -3,7 +3,7 @@ require 'rspec/expectations'
 require 'toft'
 
 CHEF_FIXTURE_PATH = File.dirname(__FILE__) + '/../../fixtures/chef'
-CONTAINER_TYPE = "centos-6"
+CONTAINER_TYPE = "lenny"
 
 World(Toft)
 
