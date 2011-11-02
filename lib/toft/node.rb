@@ -65,7 +65,7 @@ CQWv13UgQjiHgQILXSb7xdzpWK1wpDoqIEWQugRyPQDeZhPWVbB4Lg==
     end
 
     def start
-      cmd! "lxc-start -n #{@hostname} -d"
+      cmd "lxc-start -n #{@hostname} -d" # system + sudo lxc-start does not work on centos-6, but back-quote does(no clue on why)
       cmd! "lxc-wait -n #{@hostname} -s RUNNING"
       wait_ssh_ready
     end
