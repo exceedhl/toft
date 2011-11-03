@@ -28,6 +28,9 @@ if [ -e "$cache/$suite-$arch.tar.gz" ]; then
 	exit 0
 fi
 
+# clean the cache dir
+rm -rf $cache/$suite-$arch
+
 # install latest rinse
 if [[ ! `type rinse` ]]; then
 	echo "Rinse does not exist. Installing..."

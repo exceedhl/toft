@@ -28,6 +28,9 @@ if [ -e "$cache/$suite-$arch.tar.gz" ]; then
 	exit 0
 fi
 
+# clean the cache dir
+rm -rf $cache/$suite-$arch
+
 lenny_packages=ifupdown,locales,libui-dialog-perl,netbase,net-tools,dialog,apt,apt-utils,resolvconf,iproute,inetutils-ping,dnsutils,dhcp3-client,ssh,lsb-release,wget,gpgv,gnupg,sudo,ruby,rubygems1.8,ruby-dev,libopenssl-ruby,build-essential,ssl-cert
 lucid_packages=dialog,apt,apt-utils,resolvconf,iproute,inetutils-ping,dnsutils,dhcp3-client,ssh,lsb-release,wget,gpgv,gnupg,sudo,ruby,rubygems1.8,ruby-dev,libopenssl-ruby,build-essential,ssl-cert
 natty_packages=dialog,apt,apt-utils,resolvconf,iproute,inetutils-ping,dnsutils,isc-dhcp-client,isc-dhcp-common,ssh,lsb-release,gnupg,netbase,lxcguest,sudo,ruby,rubygems1.8,ruby-dev,libruby,build-essential,wget,ssl-cert
@@ -72,5 +75,3 @@ chroot "$cache/$suite-$arch" bash /tmp/install-chef-ubuntu.sh
 echo "Packaging rootfs ..."
 (cd $cache/$suite-$arch && tar zcf $suite-$arch.tar.gz .)
 mv $cache/$suite-$arch/$suite-$arch.tar.gz $cache
-
-

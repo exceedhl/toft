@@ -201,12 +201,6 @@ if [ ! -z "$clean" -a -z "$path" ]; then
     exit 0
 fi
 
-type debootstrap
-if [ $? -ne 0 ]; then
-    echo "'debootstrap' command is missing"
-    exit 1
-fi
-
 if [ -z "$path" ]; then
     echo "'path' parameter is required"
     exit 1
