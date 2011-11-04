@@ -1,1 +1,0 @@
-default[:network][:gateway_ip] = "192.168.20.1"

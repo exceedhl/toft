@@ -69,10 +69,25 @@ task :package_rpm do
   cp_r Dir.glob("#{src_dir}/bin/centos/*"), "#{content_dir}/usr/bin"
   cp_r Dir.glob("#{src_dir}/lxc-templates/*"), "#{content_dir}/usr/lib/lxc/templates"
   
+  pre_install_script = <<-eos
+#!/bin/sh -e
+# intsall lxc if not exist
+if [[ ! -f /usr/bin/lxc-ls ]]; then
+	(cd /tmp && \
+	wget http://lxc.sourceforge.net/download/lxc/lxc-0.7.4.tar.gz && \
+	tar zxf lxc-0.7.4.tar.gz && \
+	cd lxc-0.7.4 && \
+	./configure --prefix=/usr --with-config-path=/var/lib/lxc && \
+	make && \
+	make install)
+fi
+eos
+  
   post_install_script = <<-eos
 #!/bin/sh -e
 /usr/bin/lxc-prepare-host
 eos
+  File.open("#{PROJECT_ROOT}/pkg/toft-lxc-pre-install.sh", 'w') { |f| f.write(pre_install_script) }
   File.open("#{PROJECT_ROOT}/pkg/toft-lxc-post-install.sh", 'w') { |f| f.write(post_install_script) }
   
   Dir.chdir("pkg") do
@@ -93,6 +108,7 @@ eos
     -d ntp \
     -d libcap-devel \
     --post-install "#{PROJECT_ROOT}/pkg/toft-lxc-post-install.sh" \
+    --pre-install "#{PROJECT_ROOT}/pkg/toft-lxc-pre-install.sh" \
     .
     EOF
   end
