@@ -56,5 +56,5 @@ rinse --config /etc/rinse/rinse.conf \
 
 # compress root image
 echo "Packaging rootfs ..."
-(cd $cache/$suite-$arch && tar zcf $suite-$arch.tar.gz .)
+(cd $cache/$suite-$arch && tar --exclude=$suite-$arch.tar.gz -zcf $suite-$arch.tar.gz .)
 mv $cache/$suite-$arch/$suite-$arch.tar.gz $cache
