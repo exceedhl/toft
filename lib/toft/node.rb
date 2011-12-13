@@ -36,7 +36,7 @@ CQWv13UgQjiHgQILXSb7xdzpWK1wpDoqIEWQugRyPQDeZhPWVbB4Lg==
 -----END RSA PRIVATE KEY-----    
     EOF
     
-    TIMOUT_IN_SECONDS = 60
+    TIMEOUT_IN_SECONDS = 120
     TRY_INTERVAL = 0.5
     
     include Observable
@@ -156,7 +156,7 @@ CQWv13UgQjiHgQILXSb7xdzpWK1wpDoqIEWQugRyPQDeZhPWVbB4Lg==
     end
     
     def wait_remote_host_reachable
-      max_try = TIMOUT_IN_SECONDS / TRY_INTERVAL
+      max_try = TIMEOUT_IN_SECONDS / TRY_INTERVAL
       try = 0
       while try < max_try
         begin
