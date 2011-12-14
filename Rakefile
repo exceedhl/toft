@@ -34,7 +34,7 @@ eos
     fpm -s dir \
     -t deb \
     -C #{content_dir} \
-    -a all \
+    -a x86_64 \
     -n #{LXC_PACKAGE_NAME} \
     -v #{Toft::VERSION} \
     -m "Huang Liang<exceedhl@gmail.com>" \
@@ -80,7 +80,7 @@ eos
     fpm -s dir \
     -t rpm \
     -C #{content_dir} \
-    -a all \
+    -a x86_64 \
     -n #{LXC_PACKAGE_NAME} \
     -v #{Toft::VERSION} \
     -m "Huang Liang<exceedhl@gmail.com>" \
