@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    toft (0.0.6)
+    toft (0.0.8)
       net-ssh
 
 GEM

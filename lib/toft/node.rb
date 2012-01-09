@@ -36,7 +36,7 @@ CQWv13UgQjiHgQILXSb7xdzpWK1wpDoqIEWQugRyPQDeZhPWVbB4Lg==
 -----END RSA PRIVATE KEY-----    
     EOF
     
-    TIMOUT_IN_SECONDS = 60
+    TIMEOUT_IN_SECONDS = 120
     TRY_INTERVAL = 0.5
     
     include Observable
@@ -65,6 +65,7 @@ CQWv13UgQjiHgQILXSb7xdzpWK1wpDoqIEWQugRyPQDeZhPWVbB4Lg==
     end
 
     def start
+      puts "Starting host node..."
       cmd "lxc-start -n #{@hostname} -d" # system + sudo lxc-start does not work on centos-6, but back-quote does(no clue on why)
       cmd! "lxc-wait -n #{@hostname} -s RUNNING"
       wait_ssh_ready
@@ -149,31 +150,46 @@ CQWv13UgQjiHgQILXSb7xdzpWK1wpDoqIEWQugRyPQDeZhPWVbB4Lg==
     end
     
     def wait_sshd_running
-      while true
+      wait_for do
         netstat = cmd("lxc-netstat --name #{@hostname} -ta")        
         return if netstat =~ /ssh/
       end
     end
     
     def wait_remote_host_reachable
-      max_try = TIMOUT_IN_SECONDS / TRY_INTERVAL
-      try = 0
-      while try < max_try
+      wait_for do
         begin
-          break if Ping.pingecho fqdn, 0.1
+          return if Ping.pingecho fqdn, 0.1
         rescue Exception
           # fix the strange pingcho exception
         end
-        sleep TRY_INTERVAL
-        try += 1
       end
       raise RuntimeError, "Remote machine not responding." if try >= max_try
     end
 
+    def wait_for
+      return if !block_given?
+      max_try = TIMEOUT_IN_SECONDS / TRY_INTERVAL
+      try = 0
+      while try < max_try
+        output_progress
+        yield
+        sleep TRY_INTERVAL
+        try += 1        
+      end
+    end
+
+    def output_progress
+      print "."
+      STDOUT.flush
+    end
+
     def wait_ssh_ready
+      print "Waiting for host ssdh ready"
       wait_sshd_running
+      print "\nWaiting for host to be reachable"
       wait_remote_host_reachable
-      puts "SSH connection on '#{@hostname}/#{@ip}' is ready..."
+      puts "\nSSH connection on '#{@hostname}/#{@ip}' is ready."
     end
 
     def generate_lxc_config
