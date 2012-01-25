@@ -190,3 +190,4 @@ subnet $subnet netmask $netmask {
 EOF
 sudo /etc/init.d/$dhcp_daemon restart
 
+sudo apt-get install puppet
