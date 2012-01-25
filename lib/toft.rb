@@ -2,13 +2,14 @@ require 'toft/node_controller'
 require 'toft/file_checker'
 require 'toft/chef/chef_attributes'
 require 'toft/chef/chef_runner'
+require 'toft/puppet/puppet_runner'
 
 module Toft
   DYNAMIC_IP = "0.0.0.0"
   DOMAIN = "foo"
   
   class << self
-    attr_accessor :cookbook_path, :role_path
+    attr_accessor :manifest_path, :cookbook_path, :role_path
   end
   
   def create_node(hostname, options = {})
