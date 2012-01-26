@@ -54,6 +54,7 @@ CQWv13UgQjiHgQILXSb7xdzpWK1wpDoqIEWQugRyPQDeZhPWVbB4Lg==
       @chef_runner = Toft::Chef::ChefRunner.new("#{rootfs}") do |chef_command|
         run_ssh chef_command
       end
+      @puppet_runner = options[:runner]
     end
     
     def hostname
@@ -134,6 +135,10 @@ CQWv13UgQjiHgQILXSb7xdzpWK1wpDoqIEWQugRyPQDeZhPWVbB4Lg==
 
     def run_chef(run_list, params = {})
       @chef_runner.run run_list, params
+    end
+
+    def run_puppet(run_list)
+      @puppet_runner.run run_list
     end
 
     def file(path)
