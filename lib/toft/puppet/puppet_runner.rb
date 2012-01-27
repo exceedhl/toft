@@ -15,7 +15,7 @@ module Toft
 
       def run(run_list, params = {})
         copy_puppet_material
-        @command_runner.call "puppet apply #{DEST_MANIFEST_PATH}"
+        @command_runner.call "puppet apply #{DEST_MANIFEST_PATH}/#{run_list}"
       end
 
       private 
