@@ -53,6 +53,31 @@ toft -d remote lxc create n1
 
 bash < <(curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer )
 
+PUPPET EXTENSION
+=================
 
 
+Setting UP Lxc Host for puppet
+------------------------------
 
+- copy puppet.conf
+- copy fileserver.con
+- install perl
+- install yaml syck
+- copy kickstart scripts
+- add epel repo
+
+Changing hostname
+------------------
+
+- hostname command
+- change etc/hosts
+
+General
+--------
+
+- Remove duplication of runners
+- Remove initialization of runners from Node class
+- Make everything work with ubuntu and centos
+- Upload lxc images somewhere
+- Update README files
