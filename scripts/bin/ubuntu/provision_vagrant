@@ -1,0 +1,9 @@
+cd /vagrant
+wget http://dl.dropbox.com/u/43220259/toft-lxc_0.0.6_all.deb
+sudo apt-get -y remove apparmor
+sudo dpkg -i toft-lxc_0.0.6_all.deb
+sudo apt-get -fy install
+sudo ./scripts/bin/ubuntu/lxc-prepare-host
+sudo gem install bundler --no-ri --no-rdoc
+sudo bundle install
+sudo cp natty-i386.tar.gz /var/cache/lxc/
