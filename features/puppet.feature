@@ -5,8 +5,10 @@ Scenario: Run Puppet manifest on nodes
   When I run puppet manifest "test.pp" on node "n1"
   Then Node "n1" should have file or directory "/tmp/puppet_test"
 
-Scenario: Run puppet manifest with specific hostname
-  Given I have a clean running node n1 with hostname "correct.puppet.com"
+Scenario: Run puppet manifest with included nodes
+  Given I have a clean running node n1
+  And I change the internal hostname for "n1" to "correct.puppet.com"
+  And I run puppet manifest "site.pp" on node "n1"
   Then Node "n1" should have file or directory "/tmp/puppet_test_correct"
   And Node "n1" should have file or directory "/tmp/puppet_test_default"
-  And Node "n1" should not have file or directory "/tmp/puppet_test_incorrect"
+  And Node "n1" should have not file or directory "/tmp/puppet_test_incorrect"
