@@ -141,8 +141,8 @@ CQWv13UgQjiHgQILXSb7xdzpWK1wpDoqIEWQugRyPQDeZhPWVbB4Lg==
       @chef_runner.run run_list, params
     end
 
-    def run_puppet(run_list)
-      @puppet_runner.run run_list
+    def run_puppet(run_list, params = {})
+      @puppet_runner.run run_list, params
     end
 
     def file(path)

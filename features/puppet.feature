@@ -12,3 +12,8 @@ Scenario: Run puppet manifest with included nodes
   Then Node "n1" should have file or directory "/tmp/puppet_test_correct"
   And Node "n1" should have file or directory "/tmp/puppet_test_default"
   And Node "n1" should have not file or directory "/tmp/puppet_test_incorrect"
+
+Scenario: Run puppet manifest with modules
+  Given I have a clean running node n1
+  When I run puppet manifest "test_module.pp" with config file "puppet_modules.conf" on node "n1"
+  Then Node "n1" should have file or directory "/tmp/puppet_test_module"
