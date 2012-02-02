@@ -81,3 +81,4 @@ General
 - Make everything work with ubuntu and centos
 - Upload lxc images somewhere
 - Update README files
+- Remove creation of node before every feature
