@@ -22,3 +22,8 @@ Scenario: Run puppet manifest with static files being served by fileserver
   Given I have a clean running node n1
   When I run puppet manifest "test_fileserver.pp" with config file "puppet_fileserver.conf" on node "n1"
   Then Node "n1" should have file or directory "/tmp/puppet_test_fileserver"
+
+Scenario: Run puppet manifest with template dir configuration
+  Given I have a clean running node n1
+  When I run puppet manifest "test_template.pp" with config file "puppet_template.conf" on node "n1"
+  Then Node "n1" should have file or directory "/tmp/puppet_test_template"
