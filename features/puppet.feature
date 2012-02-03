@@ -32,3 +32,9 @@ Scenario: Check that package was installed on centos box
   Given I have a clean running node n1
   When I run puppet manifest "test_install.pp" on node "n1"
   Then Node "n1" should have package "zip" installed in the centos box
+
+Scenario: Check that service is running on centos box
+  Given I have a clean running node n1
+  When I run puppet manifest "test_service.pp" on node "n1"
+  Then Node "n1" should have service "named" running in the centos box
+
