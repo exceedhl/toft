@@ -27,3 +27,8 @@ Scenario: Run puppet manifest with template dir configuration
   Given I have a clean running node n1
   When I run puppet manifest "test_template.pp" with config file "puppet_template.conf" on node "n1"
   Then Node "n1" should have file or directory "/tmp/puppet_test_template"
+
+Scenario: Check that package was installed on centos box
+  Given I have a clean running node n1
+  When I run puppet manifest "test_install.pp" on node "n1"
+  Then Node "n1" should have package "zip" installed in the centos box
