@@ -82,3 +82,4 @@ General
 - Upload lxc images somewhere
 - Update README files
 - Remove creation of node before every feature
+- move provision vagrant script to prepare host 
