@@ -57,29 +57,14 @@ PUPPET EXTENSION
 =================
 
 
-Setting UP Lxc Host for puppet
-------------------------------
-
-- copy puppet.conf
-- copy fileserver.con
-- install perl
-- install yaml syck
-- copy kickstart scripts
-- add epel repo
-
-Changing hostname
-------------------
-
-- hostname command
-- change etc/hosts
-
-General
---------
-
 - Remove duplication of runners
 - Remove initialization of runners from Node class
 - Make everything work with ubuntu and centos
 - Upload lxc images somewhere
 - Update README files
 - Remove creation of node before every feature
-- move provision vagrant script to prepare host 
+
+- Fix lxc-prepare-host for centos
+- Be able to apply puppet conf from step directly
+- Make it possible to change fileserver configuration from steps
+- Understand why the rea.repo file is being rewritten in the lxc host
