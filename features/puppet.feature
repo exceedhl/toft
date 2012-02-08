@@ -38,3 +38,12 @@ Scenario: Check that service is running on centos box
   When I run puppet manifest "test_service.pp" on node "n1"
   Then Node "n1" should have service "named" running in the centos box
 
+Scenario: Run puppet manifest overriding conf settings
+  Given I have a clean running node n1
+  And node "n1" has the configuration settings:
+    |key|value|
+    |modulepath|/tmp/toft-puppet-tmp/modules|
+  When I run puppet manifest "test_module.pp" on node "n1"
+  Then Node "n1" should have file or directory "/tmp/puppet_test_module"
+  
+
