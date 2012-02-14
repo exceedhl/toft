@@ -16,7 +16,7 @@ module Toft
       def run(run_list, params = {})
         copy_puppet_material
         copy_conf_file(params[:conf_file]) if params[:conf_file]
-        @command_runner.call "puppet apply #{DEST_PUPPET_TMP}/manifests/#{run_list}"
+        @command_runner.call "puppet apply #{DEST_PUPPET_TMP}/#{run_list}"
       end
 
       private 
