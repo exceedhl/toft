@@ -68,3 +68,6 @@ PUPPET EXTENSION
 - Be able to apply puppet conf from step directly
 - Make it possible to change fileserver configuration from steps
 - Understand why the rea.repo file is being rewritten in the lxc host
+- make it possible to pass configurations without having to know the puppet tmp path
+- make it easy to run with debug mode
+- remove annoying error messages when creating toft box
