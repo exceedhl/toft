@@ -50,6 +50,7 @@ module Toft
       end
 
       def generate_solo_rb
+        mkdir_p "#{@root_dir}/tmp/chef-file-cache"
         solo = <<-EOF
 file_cache_path "/tmp/chef-file-cache"
 cookbook_path ["#{DEST_COOKBOOK_PATH}"]
