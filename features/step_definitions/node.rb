@@ -53,6 +53,13 @@ When /^I remove cname "([^"]*)" from "([^"]*)"$/ do |cname, node|
   find(node).remove_cname cname
 end
 
+When /^I change the internal hostname for "([^"]*)" to "([^"]*)"$/ do |node_hostname, internal_hostname|
+  r = find(node_hostname)
+  r.run_ssh("hostname #{internal_hostname}")
+  r.run_ssh("echo 127.0.0.1 #{internal_hostname} >> /etc/hosts")
+end
+
+
 Then /^Hostname of Node "([^"]*)" should match its name$/ do |node|
   find(node).hostname.should == node
 end

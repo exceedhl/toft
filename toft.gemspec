@@ -3,13 +3,13 @@ $:.push File.expand_path("../lib", __FILE__)
 require "toft/version"
 
 Gem::Specification.new do |s|
-  s.name        = "toft"
+  s.name        = "toft-puppet"
   s.version     = Toft::VERSION
-  s.authors     = ["Huang Liang"]
-  s.email       = ["exceedhl@gmail.com"]
-  s.homepage    = "https://github.com/exceedhl/toft"
-  s.summary     = %q{toft aims to help test infrastructure code such as chef}
-  s.description = %q{toft currently support testing chef, shell scripts using cucumber on lxc on ubuntu}
+  s.authors     = ["Francisco Trindade"]
+  s.email       = ["frank.trindade@gmail.com"]
+  s.homepage    = "https://github.com/frankmt/toft"
+  s.summary     = %q{Fork from https://github.com/exceedhl/toft to add puppet support}
+  s.description = %q{toft currently support testing chef, puppet, shell scripts using cucumber on lxc on ubuntu}
 
   s.rubyforge_project = "toft"
 

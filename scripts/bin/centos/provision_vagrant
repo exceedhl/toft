@@ -1,0 +1,11 @@
+cd /vagrant
+sudo yum -y install wget
+wget http://dl.dropbox.com/u/43220259/toft-lxc-0.0.6.noarch.rpm
+sudo yum erase -y dhclient
+sudo yum install -y --nogpgcheck toft-lxc-0.0.6.noarch.rpm
+sudo yum install -y bind dhcp dhclient bridge-utils
+sudo ./scripts/bin/centos/lxc-prepare-host
+sudo yum install -y ruby ruby-devel ruby-docs ruby-ri ruby-irb ruby-rdoc rubygems
+sudo gem install bundler --no-ri --no-rdoc
+sudo bundle install
+sudo cp natty-i386-puppet.tar.gz /var/cache/lxc/natty-i386.tar.gz

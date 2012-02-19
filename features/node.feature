@@ -35,3 +35,7 @@ Scenario: Create or destroy node
 	When I destroy node "n2"
 	Then There should be 1 nodes in the environment	
 	
+Scenario: Change hostname used internally for a specific host
+  Given I have a clean running node n1
+  And I change the internal hostname for "n1" to "correct.puppet.com"
+  Then the result of running ssh command "hostname" on "n1" should contain "correct.puppet.com"

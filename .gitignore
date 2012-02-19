@@ -8,3 +8,5 @@
 *.gem
 pkg/
 tmp/
+*.un~
+*.swp

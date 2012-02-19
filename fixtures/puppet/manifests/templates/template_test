@@ -1,0 +1,2 @@
+This is a test for the template config
+Here is the variable <%= variable %>
