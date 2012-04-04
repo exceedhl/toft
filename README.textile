@@ -15,3 +15,7 @@ Toft allows you to manage(create, destroy, configure, check...) a lxc node(or co
 h2. How to use it
 
 Check this quick "tutorial":https://github.com/exceedhl/toft/wiki/How-to-use-toft-gem-and-cucumber-to-test-chef-cookbooks to see how to use toft and cucumber to BDD your infrastructure code.
+
+h2. License
+
+MIT: http://rem.mit-license.org
