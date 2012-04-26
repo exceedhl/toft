@@ -103,6 +103,7 @@ eos
     -d sudo \
     -d bind-utils \
     -d bridge-utils \
+    -d dhclient \
     -d dhcp \
     -d bind \
     -d ntp \

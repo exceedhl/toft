@@ -194,7 +194,7 @@ CQWv13UgQjiHgQILXSb7xdzpWK1wpDoqIEWQugRyPQDeZhPWVbB4Lg==
     end
 
     def wait_ssh_ready
-      print "Waiting for host ssdh ready"
+      print "Waiting for host sshd ready"
       wait_sshd_running
       print "\nWaiting for host to be reachable"
       wait_remote_host_reachable

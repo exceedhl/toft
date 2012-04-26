@@ -49,8 +49,8 @@ cmd="debootstrap --verbose --variant=minbase --components=main,universe --arch=$
 echo $cmd
 eval $cmd
 if [ $? -ne 0 ]; then
-	echo "Failed to download the rootfs, aborting."
-	exit 1
+  echo "Failed to download the rootfs, aborting."
+  exit 1
 fi
 
 echo "Download complete."

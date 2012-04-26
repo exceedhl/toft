@@ -22,7 +22,7 @@ module Toft
       private 
 
       def copy_conf_file(conf_file)
-        cp "#{@root_dir}#{DEST_PUPPET_TMP}/conf/#{conf_file}", "#{@root_dir}#{DEST_CONF_PATH}"
+        @command_runner.call "cp #{DEST_PUPPET_TMP}/conf/#{conf_file} #{DEST_CONF_PATH}"
       end
     
       def copy_puppet_material

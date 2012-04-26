@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ $# -eq 0 ]; then
-	echo "Usage: `basename $0` <centos-6|centos-5|centos-4>"
+	echo "Usage: `basename $0` <centos-6>"
 	exit 1
 fi
 
@@ -30,8 +30,12 @@ fi
 
 # clean the cache dir
 rm -rf $cache/$suite-$arch
+mkdir -p $cache/$suite-$arch
 
 # install latest rinse
+if [ -f /etc/redhat-release ]; then # on centos
+  yum install -y perl perl-CPAN perl-libwww-perl 
+fi
 if [[ ! `type rinse` ]]; then
 	echo "Rinse does not exist. Installing..."
 	(cd /tmp && \
@@ -42,9 +46,26 @@ if [[ ! `type rinse` ]]; then
 fi
 
 # create centos image using rinse
+epel_arch=$arch
+if [ "$arch" == "amd64" ]; then
+    epel_arch="x86_64"
+fi
 cat <<EOF > /tmp/after_post_install
+## chef rpms
 chroot $cache/$suite-$arch rpm -Uvh http://rbel.co/rbel6
-chroot $cache/$suite-$arch yum -y install tar man sudo bind-utils openssh-server openssh-clients rubygem-chef
+## ruby-shadow and other libs that puppet requires
+chroot $cache/$suite-$arch rpm -Uvh http://download.fedoraproject.org/pub/epel/6/$epel_arch/epel-release-6-5.noarch.rpm
+## puppet repo
+cat <<EOFF > $cache/$suite-$arch/etc/yum.repos.d/puppet.repo
+[puppetlabs]
+name=Puppet Labs Packages
+baseurl=http://yum.puppetlabs.com/el/\\\$releasever/products/\\\$basearch/
+enabled=1
+gpgcheck=1
+gpgkey=http://yum.puppetlabs.com/RPM-GPG-KEY-puppetlabs
+EOFF
+chroot $cache/$suite-$arch yum -y install tar man sudo bind-utils openssh-server openssh-clients rubygem-chef puppet
+chroot $cache/$suite-$arch yum clean all
 EOF
 chmod +x /tmp/after_post_install
 
