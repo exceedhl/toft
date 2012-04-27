@@ -30,19 +30,15 @@ fi
 
 # clean the cache dir
 rm -rf $cache/$suite-$arch
+mkdir -p $cache/$suite-$arch
+
 
 lenny_packages=ifupdown,locales,libui-dialog-perl,netbase,net-tools,dialog,apt,apt-utils,resolvconf,iproute,inetutils-ping,dnsutils,dhcp3-client,ssh,lsb-release,wget,gpgv,gnupg,sudo,ruby,rubygems1.8,ruby-dev,libopenssl-ruby,build-essential,ssl-cert
 lucid_packages=dialog,apt,apt-utils,resolvconf,iproute,inetutils-ping,dnsutils,dhcp3-client,ssh,lsb-release,wget,gpgv,gnupg,sudo,ruby,rubygems1.8,ruby-dev,libopenssl-ruby,build-essential,ssl-cert
 natty_packages=dialog,apt,apt-utils,resolvconf,iproute,inetutils-ping,dnsutils,isc-dhcp-client,isc-dhcp-common,ssh,lsb-release,gnupg,netbase,lxcguest,sudo,ruby,rubygems1.8,ruby-dev,libruby,build-essential,wget,ssl-cert
-# check the mini ubuntu was not already downloaded
-rm -rf "$cache/$suite-$arch"
-mkdir -p "$cache/$suite-$arch"
-if [ $? -ne 0 ]; then
-	echo "Failed to create '$cache/$suite-$arch' directory"
-	exit 1
-fi
 
 # download a mini ubuntu into a cache
+apt-get install -y debootstrap
 echo "Downloading ubuntu minimal ..."
 eval "packages=\$${suite}_packages"
 cmd="debootstrap --verbose --variant=minbase --components=main,universe --arch=$arch --include=$packages $suite $cache/$suite-$arch"
@@ -70,6 +66,18 @@ export DEBIAN_FRONTEND=noninteractive
 apt-get install chef --force-yes -qy
 EOF
 chroot "$cache/$suite-$arch" bash /tmp/install-chef-ubuntu.sh
+
+# install puppet
+cat <<EOF > "$cache/$suite-$arch/tmp/install-puppet-ubuntu.sh"
+echo -e "deb http://apt.puppetlabs.com/ $suite main\ndeb-src http://apt.puppetlabs.com/ $suite main" >> /etc/apt/sources.list.d/puppet.list
+apt-key adv --keyserver keyserver.ubuntu.com --recv 4BD6EC30
+apt-get update
+apt-get install -y puppet
+EOF
+chroot "$cache/$suite-$arch" bash /tmp/install-puppet-ubuntu.sh
+
+#clean apt caches
+rm -rf $cache/$suite-$arch/var/cache/apt
 
 # compress root image
 echo "Packaging rootfs ..."

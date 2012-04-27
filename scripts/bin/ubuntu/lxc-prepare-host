@@ -8,11 +8,6 @@ fi
 
 OS=`cat /etc/issue | cut -f 1 -d " " -s`
 
-wget http://dl.dropbox.com/u/43220259/toft-lxc_0.0.6_all.deb
-sudo apt-get -y remove apparmor
-sudo dpkg -i toft-lxc_0.0.6_all.deb
-sudo apt-get -fy install
-
 gateway_ip="192.168.20.1"
 subnet="192.168.20.0"
 netmask="255.255.255.0"
@@ -193,7 +188,3 @@ subnet $subnet netmask $netmask {
 }
 EOF
 sudo /etc/init.d/$dhcp_daemon restart
-
-sudo gem install bundler --no-ri --no-rdoc
-sudo bundle install
-

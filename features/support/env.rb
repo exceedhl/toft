@@ -5,7 +5,7 @@ require 'toft'
 CHEF_FIXTURE_PATH = File.dirname(__FILE__) + '/../../fixtures/chef'
 PUPPET_FIXTURE_PATH = File.dirname(__FILE__) + '/../../fixtures/puppet'
 
-CONTAINER_TYPE = "centos-6"
+CONTAINER_TYPE = "natty"
 
 World(Toft)
 
