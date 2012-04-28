@@ -168,7 +168,7 @@ CQWv13UgQjiHgQILXSb7xdzpWK1wpDoqIEWQugRyPQDeZhPWVbB4Lg==
     def wait_remote_host_reachable
       wait_for do
         begin
-          return if Ping.pingecho fqdn, 0.1
+          return if Ping.pingecho @ip, 0.1
         rescue Exception
           # fix the strange pingcho exception
         end
@@ -180,6 +180,7 @@ CQWv13UgQjiHgQILXSb7xdzpWK1wpDoqIEWQugRyPQDeZhPWVbB4Lg==
       return if !block_given?
       max_try = TIMEOUT_IN_SECONDS / TRY_INTERVAL
       try = 0
+      
       while try < max_try
         output_progress
         yield
