@@ -9,7 +9,7 @@ module Toft
   DOMAIN = "foo"
   
   class << self
-    attr_accessor :manifest_path, :cookbook_path, :role_path
+    attr_accessor :manifest_path, :cookbook_path, :role_path, :data_bag_path
   end
   
   def create_node(hostname, options = {})
