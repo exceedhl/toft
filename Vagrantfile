@@ -3,6 +3,7 @@ Vagrant::Config.run do |config|
     config.vm.box = "ubuntu-1104-server-i386"
     config.vm.network :hostonly, "33.33.33.11"
     config.vm.share_folder("v-root2", "/home/vagrant/code", ".", :nfs => true)
+    config.vm.boot_mode = :gui
   end
   
   config.vm.define :u64 do |config|

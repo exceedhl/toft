@@ -1,4 +1,7 @@
-2012-04-26  Huang Liang  <exceedhl@gmail.com>
+2012-05-16  Huang Liang  <exceedhl@gmail.com>
 
-	* Changelog: Add puppet support
+	* Changelog: Add puppet support; Add chef databag support; Slime
+	down lucid and natty packages; Notice: lenny package does not
+	support puppet since it is not updated. It will be dropped in the
+	future release.
 
