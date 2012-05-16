@@ -63,6 +63,13 @@ baseurl=http://yum.puppetlabs.com/el/\\\$releasever/products/\\\$basearch/
 enabled=1
 gpgcheck=1
 gpgkey=http://yum.puppetlabs.com/RPM-GPG-KEY-puppetlabs
+
+[puppetlabs-deps]
+name=Puppet Labs Packages Dependency
+baseurl=http://yum.puppetlabs.com/el/\\\$releasever/dependencies/\\\$basearch/
+enabled=1
+gpgcheck=1
+gpgkey=http://yum.puppetlabs.com/RPM-GPG-KEY-puppetlabs
 EOFF
 chroot $cache/$suite-$arch yum -y install tar man sudo bind-utils openssh-server openssh-clients rubygem-chef puppet
 chroot $cache/$suite-$arch yum clean all
