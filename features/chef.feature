@@ -57,6 +57,14 @@ Scenario: Attributes table should override attributes in json file
 	Then Node "n1" should have file or directory "/tmp/stub/two_two"
 	Then Node "n1" should have file or directory "/tmp/stub/three"
 
+Scenario: Run chef recipe with data bags
+	Given I have a clean running node n1
+	When I run "recipe[test::data_bag]" on node "n1"
+	Then Node "n1" should have file or directory "/tmp/stub/bag1item1"
+	Then Node "n1" should have file or directory "/tmp/stub/bag1item2"
+	Then Node "n1" should have file or directory "/tmp/stub/bag2item1"
+	Then Node "n1" should have file or directory "/tmp/stub/bag2item2"
+
 Scenario: Run non-exist recipe
 
 Scenario: Run non-exist role
