@@ -34,9 +34,10 @@ mkdir -p $cache/$suite-$arch
 
 
 lenny_packages=ifupdown,locales,libui-dialog-perl,netbase,net-tools,dialog,apt,apt-utils,resolvconf,iproute,inetutils-ping,dnsutils,dhcp3-client,ssh,lsb-release,wget,gpgv,gnupg,sudo,ruby,rubygems1.8,ruby-dev,libopenssl-ruby,build-essential,ssl-cert
+squeeze_packages=$lenny_packages
 lucid_packages=dialog,apt,apt-utils,resolvconf,iproute,inetutils-ping,dnsutils,dhcp3-client,ssh,lsb-release,wget,gpgv,gnupg,sudo,ruby,rubygems1.8,ruby-dev,libopenssl-ruby,build-essential,ssl-cert
 natty_packages=dialog,apt,apt-utils,resolvconf,iproute,inetutils-ping,dnsutils,isc-dhcp-client,isc-dhcp-common,ssh,lsb-release,gnupg,netbase,lxcguest,sudo,ruby,rubygems1.8,ruby-dev,libruby,build-essential,wget,ssl-cert
-oneiric_packages=dialog,apt,apt-utils,resolvconf,iproute,inetutils-ping,dnsutils,isc-dhcp-client,isc-dhcp-common,ssh,lsb-release,gnupg,netbase,lxcguest,sudo,ruby,rubygems1.8,ruby-dev,libruby,build-essential,wget,ssl-cert
+oneiric_packages=$natty_packages
 
 # download a mini ubuntu into a cache
 apt-get install -y debootstrap
