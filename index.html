@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Toft by exceedhl</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Toft</h1>
+        <p>toft is a library currently supporting testing infrastructure code such as chef, shell scripts with cucumber and lxc on linux machine</p>
+        <p class="view"><a href="https://github.com/exceedhl/toft">View the Project on GitHub <small>exceedhl/toft</small></a></p>
+        <ul>
+          <li><a href="https://github.com/exceedhl/toft/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/exceedhl/toft/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/exceedhl/toft">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h3>Toft has released a new version.</h3>
+
+<p>Toft 0.0.11 has been released, with puppet and chef data bag support. More details can be found in the <a href="https://github.com/exceedhl/toft/blob/master/Changelog">changelog</a>.</p>
+
+<h3>Introduction</h3>
+
+<p>Toft provides deb and rpm packages to simplify the usage of lxc; it also provides pre-created linux images(lucid, natty and centos-6) and scripts to create these images so user can play with lxc containers by simply installing a package and download an images file. </p>
+
+<p>Toft also provides a ruby gem, wrapping common tasks such as managing nodes, running chef recipes, running ssh commands and verifying system status in ruby API; therefore you can use it with test framework such as rspec, cucumber to write tests against chef receipes, packages, scripts.</p>
+
+<p>To use toft, add this to your Gemfile </p>
+
+<pre><code>gem "toft", "~&gt; 0.0.11"
+</code></pre>
+
+<p>or install gem directly:</p>
+
+<pre><code>gem install toft
+</code></pre>
+
+<p>Check the <a href="https://github.com/exceedhl/toft/wiki/How-to-use-toft-gem-and-cucumber-to-test-chef-cookbooks">tutorial</a> for more info about api and lxc.</p>
+
+<p>You can also checkout this <a href="https://vimeo.com/38621884">demo</a>.</p>
+
+<h3>Motivation</h3>
+
+<p>Infrastructure code development is not easy. You make some changes on your chef or shell scripts and wait an amount of time to check the results manually. As a developer I want to easily run the scripts I just wrote on a clean environment and check whether some file or directories exist, whether a package is installed, whether a service is started etc., and I want it fast. Also the whole process should be recorded in automatic tests so that I do not have to manually repeat the whole process everytime, and with these tests I do not have to worry that in the future I or other people will not ruin something working.</p>
+
+<p>While vagrant and cloud service provier such as Amazon already enable us to create and destroy arbitrary environment as we need, the creation and provisioning of those VM nodes tend to be slow. "LXC":<a href="http://lxc.sourceforge.net/">http://lxc.sourceforge.net/</a> provides us one more choice. It takes less time to create and still provides a complete VM environment like vagrant or Amazon provide us. </p>
+
+<p>Toft allows you to manage(create, destroy, configure, check...) a lxc node(or container as they called it) and test your infrastructure code in it. Creating a new lxc node take no more than 10 seconds(depends on your machine power) and most of the time is spent on copy rootfs files. Toft provides api to allow you run chef recipes, ssh commands on the node and assort of checkers to help you check the node status, relieving you from manual result verfication.</p>
+
+<h3>Authors and Contributors</h3>
+
+<p>This project is maintained by Huang Liang (<a href="https://github.com/exceedhl" class="user-mention">@exceedhl</a>) and Francisco Trindade (<a href="https://github.com/frankmt">@frankmt</a>).</p>
+      </section>
+    </div>
+    <footer>
+      <p>Project maintained by <a href="https://github.com/exceedhl">exceedhl</a></p>
+      <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><!--<![endif]-->
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-30537271-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+  </body>
+</html>
