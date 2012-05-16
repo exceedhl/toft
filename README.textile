@@ -1,3 +1,7 @@
+h2. Toft has released a new version.
+
+Toft 0.0.11 has been released, with puppet and chef data bag support. More details can be found in the "changelog":https://github.com/exceedhl/toft/blob/master/Changelog.
+
 h2. What is Toft
 
 Toft provides deb and rpm packages to simplify the usage of lxc; it also provides pre-created linux images(lucid, natty and centos-6) and scripts to create these images so user can play with lxc containers by simply installing a package and download an images file. 
