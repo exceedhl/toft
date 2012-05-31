@@ -160,7 +160,7 @@ CQWv13UgQjiHgQILXSb7xdzpWK1wpDoqIEWQugRyPQDeZhPWVbB4Lg==
     
     def wait_sshd_running
       wait_for do
-        netstat = cmd("lxc-netstat --name #{@hostname} -ta")        
+        netstat = cmd("lxc-netstat -n #{@hostname} -ta")        
         return if netstat =~ /ssh/
       end
     end
