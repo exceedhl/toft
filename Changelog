@@ -1,3 +1,8 @@
+2012-06-04  Huang Liang  <lhuang@thoughtworks.com>
+
+	* Changelog: lxc-netstat --name is not working on ubuntu 10.04,
+	use -n instead (from lukasz-kaniowski).
+
 2012-05-16  Huang Liang  <exceedhl@gmail.com>
 
 	* Changelog: Add puppet support; Add chef databag support; Slime
