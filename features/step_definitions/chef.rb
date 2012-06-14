@@ -41,3 +41,15 @@ end
 When /^I run "([^"]*)" on node "([^"]*)" and overwrite attributes with json file "([^"]*)" and chef attributes:$/ do |run_list, node, json_file, table|
   find(node).run_chef run_list, {:json => CHEF_FIXTURE_PATH + '/attributes.json', :attributes => Toft::ChefAttributes.new(table)}
 end
+
+When /^I add another cookbook "(.*?)"$/ do |cookbook_path|
+  Toft.cookbook_path = [CHEF_FIXTURE_PATH + '/cookbooks', CHEF_FIXTURE_PATH + "/#{cookbook_path}"]
+end
+
+When /^I add another role dir "(.*?)"$/ do |role_path|
+  Toft.role_path = [CHEF_FIXTURE_PATH + '/roles', CHEF_FIXTURE_PATH + "/#{role_path}"]
+end
+
+When /^I add another databag dir "(.*?)"$/ do |databag_path|
+  Toft.data_bag_path = [CHEF_FIXTURE_PATH + '/data_bags', CHEF_FIXTURE_PATH + "/#{databag_path}"]
+end

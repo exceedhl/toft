@@ -38,7 +38,7 @@ Scenario: Toft should not deal with empty cookbook and role path
   Then Running chef "recipe[test]" on node "n1" should succeed
   When I set the cookbook path to empty
   Then Running chef "recipe[test]" on node "n1" should fail
-	
+  
 Scenario: Run chef recipe with json attributes file
   Given I have a clean running node n1
   When I run "recipe[test::attribute]" on node "n1" and overwrite attributes with json file "attributes.json"
@@ -65,6 +65,14 @@ Scenario: Run chef recipe with data bags
   Then Node "n1" should have file or directory "/tmp/stub/bag2item1"
   Then Node "n1" should have file or directory "/tmp/stub/bag2item2"
 
+Scenario: Toft should deal with multiple cookbook, roles and databag paths
+  Given I have a clean running node n1
+  When I add another cookbook "cookbooks2"
+  And I add another role dir "roles2"
+  And I add another databag dir "data_bags2"
+  Then Running chef "role[test2]" on node "n1" should succeed
+  And Node "n1" should have file or directory "/tmp/test2/bag3item3"
+	
 Scenario: Run non-exist recipe
 
 Scenario: Run non-exist role

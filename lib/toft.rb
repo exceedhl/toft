@@ -37,3 +37,9 @@ class String
     empty?
   end
 end
+
+class Array
+  def blank?
+    empty?
+  end
+end

@@ -23,6 +23,7 @@ Vagrant::Config.run do |config|
     config.vm.box = "centos6-x86_64"
     config.vm.network :hostonly, "33.33.33.13"
     config.vm.share_folder("v-root3", "/home/vagrant/code", ".", :nfs => true)
+    config.vm.boot_mode = :gui
   end
 
 end

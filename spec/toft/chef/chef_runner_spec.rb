@@ -31,4 +31,11 @@ describe "ChefRunner" do
     lambda { cf.run "run list" }.should raise_error RuntimeError
   end
 
+  it "should throw exception if data bags not exist" do
+    Toft.cookbook_path = "#{PROJECT_ROOT}/fixtures/chef/cookbookse"
+    Toft.data_bag_path = "non-exist-data-bags"
+    cf = Toft::Chef::ChefRunner.new "#{PROJECT_ROOT}/tmp"
+    lambda { cf.run "run list" }.should raise_error RuntimeError
+  end
+
 end

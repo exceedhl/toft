@@ -42,9 +42,16 @@ module Toft
         raise ArgumentError, "Toft.cookbook_path can not be empty!" if Toft.cookbook_path.blank?
         rm_rf "#{@root_dir}#{DEST_CHEF_TMP}"  
         mkdir_p "#{@root_dir}#{DEST_CHEF_TMP}"
-        cp_r Toft.cookbook_path, "#{@root_dir}#{DEST_COOKBOOK_PATH}"
-        cp_r Toft.role_path, "#{@root_dir}#{DEST_ROLE_PATH}" unless roles_missing?
-        cp_r Toft.data_bag_path, "#{@root_dir}#{DEST_DATA_BAG_PATH}" unless data_bags_missing?
+        copy_resources Toft.cookbook_path, "#{@root_dir}#{DEST_COOKBOOK_PATH}"
+        copy_resources Toft.role_path, "#{@root_dir}#{DEST_ROLE_PATH}" unless roles_missing?
+        copy_resources Toft.data_bag_path, "#{@root_dir}#{DEST_DATA_BAG_PATH}" unless data_bags_missing?
+      end
+
+      def copy_resources(src_dir, dest_dir)
+        src_dir = [src_dir] if src_dir.is_a? String
+        src_dir.each do |dir|
+          cp_r dir + "/.", dest_dir
+        end
       end
 
       def roles_missing?
