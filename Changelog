@@ -1,3 +1,9 @@
+2012-06-14  Huang Liang  <lhuang@thoughtworks.com>
+
+	* Changelog: Merged ruby 1.9 support from
+	https://github.com/TensorWrench/toft; add multiple path support
+	for cookbook, role and databags.
+
 2012-06-04  Huang Liang  <lhuang@thoughtworks.com>
 
 	* Changelog: lxc-netstat --name is not working on ubuntu 10.04,
