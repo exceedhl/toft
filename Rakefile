@@ -49,8 +49,6 @@ eos
     -d bind9 \
     -d ntp \
     --replaces lxc \
-    --conflicts apparmor \
-    --conflicts apparmor-utils \
     --post-install "#{PROJECT_ROOT}/pkg/toft-lxc-post-install.sh" \
     .
     EOF
